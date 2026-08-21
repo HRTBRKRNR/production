@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>// WiCyS_TDC_2025 :: CHALLENGE_INDEX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="index.html" class="nav-logo">SYS_<span>HRTBRKRNR</span>.exe</a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">ABOUT</a></li>
+    <li><a href="index.html#ctf">CTF</a></li>
+    <li><a href="index.html#articles">ARTICLES</a></li>
+    <li><a href="index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#about"    onclick="closeMenu()">ABOUT</a>
+  <a href="index.html#ctf"      onclick="closeMenu()">CTF WRITE-UPS</a>
+  <a href="index.html#articles" onclick="closeMenu()">ARTICLES</a>
+  <a href="index.html#contact"  onclick="closeMenu()">CONTACT</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero" style="min-height: 40vh; display: flex; align-items: center; justify-content: center;">
+  <div class="hero-content" style="text-align: center; width: 100%; max-width: 900px;">
+    <p class="hero-tag">&gt;_ WiCyS TARGET DEFENSE CHALLENGE 2025 :: WRITE-UP INDEX</p>
+    <h1 class="hero-name" style="font-size: clamp(1.6rem, 5vw, 3rem);">
+      Cyber Target Defense <span>Challenge</span>
+    </h1>
+    <p class="hero-sub" style="font-size: 1.1rem; margin-top: 0.5rem;">Burrowing the Business.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ EVENT BRIEF ═══ -->
+<section id="event-brief" style="padding: 2rem 2rem;">
+  <div class="container">
+    <div class="terminal-block" style="max-width: 820px; margin: 2.5rem auto;">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="terminal-title">event_brief.txt</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">❯ </span><span class="t-cmd">cat event_brief.txt</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-comment">// ─── EVENT OVERVIEW ───</span></div>
+        <div><span class="t-key">event</span>       <span class="t-val">: "4th Annual Target Cyber Defense Challenge"</span></div>
+        <div><span class="t-key">host</span>        <span class="t-val">: "WiCyS + Target"</span></div>
+        <div><span class="t-key">theme</span>       <span class="t-val">: "Burrowing the Business"</span></div>
+        <div><span class="t-key">year</span>        <span class="t-val">: "2024–2025"</span></div>
+        <div><span class="t-key">format</span>      <span class="t-val">: "CTF-style // Gamified Training"</span></div>
+        <div><span class="t-key">url</span>         <span class="t-val">: "<a href="https://www.wicys.org/benefits/cyber-defense-challenge-made-possible-by-target/" target="_blank" style="color: var(--green-neon); text-decoration: none; border-bottom: 1px solid rgba(77,250,84,.35);">wicys.org/target-cyber-defense-challenge</a>"</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-comment">// ─── CHALLENGE TIERS ───</span></div>
+        <div><span class="t-key">tier_1</span>      <span class="t-val">: "Defender — CTF-style challenges simulating active incident response"</span></div>
+        <div><span class="t-key">tier_2</span>      <span class="t-val">: "Attacker — top 50 from Tier 1 flip sides and play the threat actor"</span></div>
+        <div><span class="t-key">tier_3</span>      <span class="t-val">: "Presentation — top 10 brief the Target + WiCyS team on key takeaways"</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-comment">// ─── OPERATOR LOG ───</span></div>
+        <div class="t-val" style="line-height: 1.85; white-space: normal; padding: 0 0 0 .25rem;">
+          Participated in the 4th annual Target Cyber Defense Challenge. a gamified educational training CTF, playing both a defender and red team role. Built for WiCyS members to hone cybersecurity skills through intel-driven scenarios and current threat landscape simulations. Below are my write ups of the challenges I successfully completed during the competition.
+        </div>
+        <div>&nbsp;</div>
+        <div><span class="t-prompt">❯ </span><span class="t-cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ PRACTICE CHALLENGES ═══ -->
+<section id="practice">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">PRACTICE <span>CHALLENGES</span></h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="ctf-grid">
+
+      <!-- P1 -->
+      <a href="ctf-wicys-tdc-2025/p1.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">30 PTS</span>
+          </div>
+          <div class="ctf-title">wicys [Welcome]</div>
+          <div class="ctf-desc">Flag formats decoded — your first step into the challenge arena.</div>
+        </div>
+      </a>
+
+      <!-- P2 -->
+      <a href="ctf-wicys-tdc-2025/p2.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">30 PTS</span>
+          </div>
+          <div class="ctf-title">Hidden Challenges</div>
+          <div class="ctf-desc">The flag hides in plain sight — first letters tell the truth.</div>
+        </div>
+      </a>
+
+      <!-- P3.1 -->
+      <a href="ctf-wicys-tdc-2025/p3_1.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">15 PTS</span>
+          </div>
+          <div class="ctf-title">Sub-challenges</div>
+          <div class="ctf-desc">The answer is between quotes — third challenge in the tutorial.</div>
+        </div>
+      </a>
+
+      <!-- P3.2 -->
+      <a href="ctf-wicys-tdc-2025/p3_2.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">15 PTS</span>
+          </div>
+          <div class="ctf-title">Limited Attempts</div>
+          <div class="ctf-desc">100 attempts, 1-10 — no tricks, no guessing in the dark.</div>
+        </div>
+      </a>
+
+      <!-- P4 -->
+      <a href="ctf-wicys-tdc-2025/p4.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">100 PTS</span>
+          </div>
+          <div class="ctf-title">Hints</div>
+          <div class="ctf-desc">Bold letters in the source — Inspect reveals what View Source cannot.</div>
+        </div>
+      </a>
+
+      <!-- P5 -->
+      <a href="ctf-wicys-tdc-2025/p5.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">42 PTS</span>
+          </div>
+          <div class="ctf-title">Cooperation</div>
+          <div class="ctf-desc">Nudge, don't spoil — the art of the assist.</div>
+        </div>
+      </a>
+
+      <!-- P6 -->
+      <a href="ctf-wicys-tdc-2025/p6.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">1058 PTS</span>
+          </div>
+          <div class="ctf-title">The Scenario</div>
+          <div class="ctf-desc">Shadow Gopher is burrowing in — will Personalyz.io survive the IPO?</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ DEFENSIVE CHALLENGES ═══ -->
+<section id="defensive">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">DEFENSIVE <span>CHALLENGES</span></h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="ctf-grid">
+
+      <!-- D1 -->
+      <a href="ctf-wicys-tdc-2025/d1.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">100 PTS</span>
+          </div>
+          <div class="ctf-title">Mystery Mail</div>
+          <div class="ctf-desc">Identify the malicious IP address in an extortion email.</div>
+        </div>
+      </a>
+
+      <!-- D2 -->
+      <a href="ctf-wicys-tdc-2025/d2.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">100 PTS</span>
+          </div>
+          <div class="ctf-title">Not-so-Simple Mail Protocol</div>
+          <div class="ctf-desc">Identify the first extortion email sent to the organization.</div>
+        </div>
+      </a>
+
+      <!-- D3 -->
+      <a href="ctf-wicys-tdc-2025/d3.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">100 PTS</span>
+          </div>
+          <div class="ctf-title">Ransom Wrangler</div>
+          <div class="ctf-desc">Negotiate with the adversary to find the flag.</div>
+        </div>
+      </a>
+
+      <!-- D4 — LOCKED -->
+      <div class="ctf-card" style="opacity: 0.45; pointer-events: none; cursor: not-allowed;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--magenta); text-shadow: var(--glow-magenta);">★★★★★ HARD</span>
+            <span class="ctf-tag">500 PTS</span>
+            <span class="ctf-tag" style="color: var(--yellow-neon); border-color: var(--yellow-neon);">TRANSMISSION LOST</span>
+          </div>
+          <div class="ctf-title">Trout of Office</div>
+          <div class="ctf-desc">Write-up unavailable — transmission lost.</div>
+        </div>
+      </div>
+
+      <!-- D5 -->
+      <a href="ctf-wicys-tdc-2025/d5.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--yellow-neon); text-shadow: var(--glow-yellow);">★★★☆☆ MEDIUM</span>
+            <span class="ctf-tag">300 PTS</span>
+          </div>
+          <div class="ctf-title">Ahoy, PCAP'n!</div>
+          <div class="ctf-desc">Dive into (Wire)Shark-infested waters and find the C2 treasure.</div>
+        </div>
+      </a>
+
+      <!-- D6 -->
+      <a href="ctf-wicys-tdc-2025/d6.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--magenta); text-shadow: var(--glow-magenta);">★★★★★ HARD</span>
+            <span class="ctf-tag">500 PTS</span>
+          </div>
+          <div class="ctf-title">Smuggled Away!</div>
+          <div class="ctf-desc">Discover what the adversary exfiltrated in a packet capture.</div>
+        </div>
+      </a>
+
+      <!-- D7 -->
+      <a href="ctf-wicys-tdc-2025/d7.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">100 PTS</span>
+          </div>
+          <div class="ctf-title">Endpoints and Exfiltration</div>
+          <div class="ctf-desc">What caused the data exfiltration in the first place?</div>
+        </div>
+      </a>
+
+      <!-- D8 -->
+      <a href="ctf-wicys-tdc-2025/d8.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">100 PTS</span>
+          </div>
+          <div class="ctf-title">Shadow Commit</div>
+          <div class="ctf-desc">Where did the adversary make the malicious change in the git source files?</div>
+        </div>
+      </a>
+
+      <!-- D9 -->
+      <a href="ctf-wicys-tdc-2025/d9.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--yellow-neon); text-shadow: var(--glow-yellow);">★★★☆☆ MEDIUM</span>
+            <span class="ctf-tag">300 PTS</span>
+          </div>
+          <div class="ctf-title">Logging for Truth</div>
+          <div class="ctf-desc">Identify if Erik was the person who made the malicious change in the git source files.</div>
+        </div>
+      </a>
+
+      <!-- D10 -->
+      <a href="ctf-wicys-tdc-2025/d10.html" class="ctf-card" style="text-decoration: none; display: block;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--green-neon); text-shadow: var(--glow-green);">★☆☆☆☆ EASY</span>
+            <span class="ctf-tag">100 PTS</span>
+          </div>
+          <div class="ctf-title">Backup Break-in</div>
+          <div class="ctf-desc">How did the adversary get the credentials in the first place?</div>
+        </div>
+      </a>
+
+      <!-- D11 — LOCKED -->
+      <div class="ctf-card" style="opacity: 0.45; pointer-events: none; cursor: not-allowed;">
+        <div class="ctf-body">
+          <div class="ctf-meta">
+            <span class="ctf-difficulty" style="color: var(--yellow-neon); text-shadow: var(--glow-yellow);">★★★☆☆ MEDIUM</span>
+            <span class="ctf-tag">300 PTS</span>
+            <span class="ctf-tag" style="color: var(--yellow-neon); border-color: var(--yellow-neon);">TRANSMISSION LOST</span>
+          </div>
+          <div class="ctf-title">Semi-Final Boss</div>
+          <div class="ctf-desc">Write-up unavailable — transmission lost.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <span class="footer-copy" id="site-copyright"></span>
+  <span class="footer-tag">[ STAY CURIOUS // STAY SHARP // END TRANSMISSION ]</span>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

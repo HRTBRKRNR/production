@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>// D8. Shadow Commit :: CTF WRITE-UP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .writeup-hero { min-height: 36vh; display: flex; align-items: flex-end; padding: 7rem 2rem 3rem; position: relative; overflow: hidden; background: radial-gradient(ellipse 70% 60% at 15% 60%, rgba(23,13,133,.5) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 90% 20%, rgba(211,74,232,.12) 0%, transparent 60%), linear-gradient(180deg, #06040F 0%, #0E093D 70%, #06040F 100%); }
+    .writeup-hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(95,28,189,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(95,28,189,.1) 1px, transparent 1px); background-size: 48px 48px; animation: gridScroll 20s linear infinite; }
+    .writeup-hero-content { position: relative; z-index: 2; max-width: 1100px; width: 100%; margin: 0 auto; }
+    .back-btn { display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-mono); font-size: .72rem; color: var(--green-neon); text-decoration: none; letter-spacing: .12em; margin-bottom: 1.5rem; transition: text-shadow .2s; }
+    .back-btn:hover { text-shadow: var(--glow-green); }
+    .writeup-title { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 900; color: var(--white); letter-spacing: .03em; margin-bottom: 1rem; line-height: 1.1; }
+    .writeup-title span { color: var(--magenta); text-shadow: var(--glow-magenta); }
+    .writeup-meta { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.2rem; align-items: center; }
+    .meta-badge { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; padding: .25rem .75rem; border-radius: 2px; border: 1px solid var(--grey-dim); background: rgba(6,4,15,.6); color: var(--white); }
+    .meta-badge.difficulty-easy { border-color: var(--green-neon); color: var(--green-neon); text-shadow: var(--glow-green); }
+    .meta-badge.category { border-color: var(--purple-vivid); color: var(--magenta); background: rgba(95,28,189,.2); }
+    .meta-badge.points { border-color: var(--green-neon); color: var(--green-neon); }
+    .writeup-tagline { font-family: var(--font-mono); font-size: .85rem; color: rgba(240,238,248,.6); letter-spacing: .08em; font-style: italic; }
+    .writeup-layout { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; display: grid; grid-template-columns: 1fr 260px; gap: 3rem; align-items: start; }
+    .toc { position: sticky; top: 80px; background: rgba(6,4,15,.8); border: 1px solid var(--purple-vivid); border-radius: 4px; padding: 1.25rem; box-shadow: var(--glow-purple); }
+    .toc-title { font-family: var(--font-display); font-size: .72rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .15em; margin-bottom: 1rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim); }
+    .toc ul { list-style: none; } .toc ul li { margin-bottom: .4rem; }
+    .toc ul li a { font-family: var(--font-mono); font-size: .72rem; color: rgba(240,238,248,.55); text-decoration: none; letter-spacing: .06em; transition: color .2s, text-shadow .2s; display: block; padding: .2rem 0 .2rem .6rem; border-left: 2px solid transparent; }
+    .toc ul li a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-left-color: var(--green-neon); }
+    .toc ul li.toc-sub a { padding-left: 1.4rem; font-size: .68rem; }
+    .writeup-section { margin-bottom: 3.5rem; }
+    .writeup-section h2 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--magenta); text-shadow: var(--glow-magenta); letter-spacing: .08em; margin-bottom: 1.25rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim); display: flex; align-items: center; gap: .75rem; }
+    .writeup-section h2::before { content: '//'; color: var(--purple-vivid); font-size: .85rem; }
+    .writeup-section h3 { font-family: var(--font-display); font-size: .82rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .1em; margin: 1.75rem 0 .75rem; }
+    .writeup-section p, .writeup-section li { font-family: var(--font-body); font-size: 1rem; color: rgba(240,238,248,.75); font-weight: 300; line-height: 1.85; }
+    .writeup-section ul, .writeup-section ol { margin: .75rem 0 .75rem 1.5rem; }
+    .writeup-section li { margin-bottom: .35rem; }
+    .writeup-section a { color: var(--magenta); text-decoration: none; border-bottom: 1px solid rgba(211,74,232,.35); transition: color .2s, border-color .2s, text-shadow .2s; }
+    .writeup-section a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-bottom-color: var(--green-neon); }
+    .writeup-section b, .writeup-section strong { color: var(--white); font-weight: 600; }
+    .code-block { font-family: var(--font-mono); font-size: .82rem; color: var(--green-neon); background: rgba(6,4,15,.9); border: 1px solid var(--purple-vivid); border-left: 3px solid var(--green-neon); border-radius: 2px; padding: .85rem 1.25rem; margin: 1rem 0; overflow-x: auto; box-shadow: inset 0 0 20px rgba(77,250,84,.03); white-space: pre; }
+    .code-block::before { content: '❯ '; color: var(--magenta); }
+    .image-container { margin: 1.25rem 0; }
+    .image-container img { width: 100%; border: 1px solid var(--purple-vivid); border-radius: 4px; display: block; }
+    .img-caption { font-family: var(--font-mono); font-size: .68rem; color: rgba(240,238,248,.35); letter-spacing: .08em; margin-top: .4rem; text-align: center; }
+    .writeup-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+    .writeup-table thead td { font-family: var(--font-display); font-size: .72rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .1em; padding: .75rem 1rem; background: rgba(95,28,189,.2); border: 1px solid var(--purple-vivid); }
+    .writeup-table tbody tr { border-bottom: 1px solid var(--grey-dim); transition: background .2s; }
+    .writeup-table tbody tr:hover { background: rgba(95,28,189,.08); }
+    .writeup-table tbody td { padding: .85rem 1rem; color: rgba(240,238,248,.7); font-weight: 300; line-height: 1.7; vertical-align: top; border-left: 1px solid var(--grey-dim); border-right: 1px solid var(--grey-dim); }
+    .writeup-table tbody td:first-child { color: var(--magenta); font-weight: 400; white-space: nowrap; width: 160px; }
+    .writeup-table a { color: var(--magenta); }
+    @media (max-width: 900px) { .writeup-layout { grid-template-columns: 1fr; padding: 2rem 1.25rem 4rem; } .toc { position: static; order: -1; } }
+    @media (max-width: 600px) { .writeup-meta { gap: .4rem; } .writeup-table tbody td:first-child { white-space: normal; width: auto; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">SYS_<span>HRTBRKRNR</span>.exe</a>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">ABOUT</a></li>
+    <li><a href="../index.html#ctf">CTF</a></li>
+    <li><a href="../index.html#articles">ARTICLES</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="../index.html#about"    onclick="closeMenu()">ABOUT</a>
+  <a href="../index.html#ctf"      onclick="closeMenu()">CTF WRITE-UPS</a>
+  <a href="../index.html#articles" onclick="closeMenu()">ARTICLES</a>
+  <a href="../index.html#contact"  onclick="closeMenu()">CONTACT</a>
+</div>
+
+<div class="writeup-hero">
+  <div class="writeup-hero-content">
+    <a href="../target-defense-2025.html" class="back-btn">← BACK TO CTF WRITE-UPS</a>
+    <h1 class="writeup-title">D8. <span>Shadow Commit</span></h1>
+    <div class="writeup-meta">
+      <span class="meta-badge difficulty-easy">★☆☆☆☆ EASY</span>
+      <span class="meta-badge points">100 PTS</span>
+      <span class="meta-badge category">INVESTIGATION</span>
+      <span class="meta-badge">WiCyS + Target Defense Challenge 2025: BURROWING THE BUSINESS</span>
+    </div>
+    <p class="writeup-tagline">&gt;_ Identify where the adversary made the malicious change in the git source files.</p>
+  </div>
+</div>
+
+<div class="writeup-layout">
+  <div class="writeup-body">
+
+    <div class="writeup-section" id="challenge">
+      <h2>Challenge</h2>
+      <p>We've identified the piece of software responsible for the exfiltration, and it's one of Personalyz.io's internally developed apps — that's not good. We reach out to the developer and they quickly report back that their repository was compromised. Looks like all we received was a <b>.git</b> directory — no source files, no README, just the version history.</p>
+      <p>Somewhere in the commit log, a change was made that allowed the threat actor to use it to exfiltrate data. Your task is to uncover the commit ID of that shady operation and identify the malicious IPv4 address.</p>
+
+      <h3>Objectives</h3>
+      <p>Find the commit hash where the malicious change was introduced and obtain the malicious IPv4 address.</p>
+
+      <h3>Flag Format</h3>
+      <div class="code-block">###.###.###.###</div>
+
+      <h3>Required Tools</h3>
+      <ul>
+        <li>git</li>
+      </ul>
+
+      <h3>Additional Resources</h3>
+      <ul>
+        <li><a href="https://docs.github.com/en" target="_blank">git docs</a></li>
+        <li><a href="https://gchq.github.io/CyberChef/" target="_blank">CyberChef</a></li>
+      </ul>
+    </div>
+
+    <div class="writeup-section" id="solution">
+      <h2>Solution</h2>
+      <p>We are given a zip folder <b>shadow.zip</b> containing the git directory files. Organize and extract:</p>
+      <div class="code-block">mkdir D8</div>
+      <div class="code-block">mv shadow.zip D8</div>
+      <div class="code-block">cd D8</div>
+      <div class="code-block">ls</div>
+      <div class="code-block">unzip shadow.zip</div>
+      <p>List all files including hidden ones:</p>
+      <div class="code-block">ls -la</div>
+
+      <div class="image-container">
+        <img src="assets/D8_02.png" alt="ls -la showing .git directory">
+        <p class="img-caption">Terminal — .git directory visible (prefixed with a dot, as expected)</p>
+      </div>
+
+      <p>Inspect the .git directory contents:</p>
+      <div class="code-block">ls -la .git</div>
+
+      <div class="image-container">
+        <img src="assets/D8_03.png" alt=".git directory contents">
+        <p class="img-caption">.git directory — contains a log directory where commit history lives</p>
+      </div>
+
+      <p>Use git log with a custom format to read the commit history:</p>
+      <table class="writeup-table">
+        <thead><tr><td>Argument</td><td>Description</td></tr></thead>
+        <tbody>
+          <tr><td>git log</td><td>Shows the commit history</td></tr>
+          <tr><td>--pretty=format:</td><td>Customize the output format for each commit</td></tr>
+          <tr><td>%h</td><td>Short commit hash</td></tr>
+          <tr><td>%an</td><td>Author name</td></tr>
+          <tr><td>%ad</td><td>Author date</td></tr>
+          <tr><td>%s</td><td>Commit message</td></tr>
+        </tbody>
+      </table>
+      <div class="code-block">git log --pretty=format:'%h %an %ad %s'</div>
+
+      <div class="image-container">
+        <a href="assets/D8_04.png"><img src="assets/D8_04.png" alt="git log output"></a>
+        <p class="img-caption">git log — full commit history showing multiple contributors &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <p>A brief inspection reveals:</p>
+      <ul>
+        <li>Many commits created by a user named <b>eric</b></li>
+        <li>Recent commits by users named <b>dpeddi</b> and <b>Eric Lesiuta</b></li>
+        <li>Commits dating back to 2020</li>
+      </ul>
+      <p>Narrow the search by excluding <b>eric</b> (case-sensitive) using the <b>-v</b> flag in grep:</p>
+      <div class="code-block">git log --pretty=format:'%h %an %ad %s' | grep -v 'eric'</div>
+
+      <div class="image-container">
+        <img src="assets/D8_05.png" alt="git log filtered — dpeddi commits highlighted">
+        <p class="img-caption">Filtered log — anomalous user "dpeddi" stands out</p>
+      </div>
+
+      <p>Who is <b>dpeddi</b>? Review the files modified in that commit using the short hash:</p>
+      <div class="code-block">git show 6a27ae4</div>
+
+      <div class="image-container">
+        <a href="assets/D8_06.png"><img src="assets/D8_06.png" alt="git show output for dpeddi commit"></a>
+        <p class="img-caption">git show — dpeddi commit details and file changes &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <p>I could not initially find an IP address in the commits. However, I found changes to the README and python-publish.yml files by <b>Eric Lesiuta</b>. After reading the git documentation, I found the following command to force a checkout and restore files in the working directory:</p>
+      <div class="code-block">git checkout -f</div>
+
+      <div class="image-container">
+        <img src="assets/D8_07.png" alt="git checkout -f output">
+        <p class="img-caption">git checkout -f — restoring the working directory files</p>
+      </div>
+
+      <div class="image-container">
+        <img src="assets/D8_08.png" alt="Restored source files visible in directory">
+        <p class="img-caption">Source files restored — backupy directory and .py files now accessible</p>
+      </div>
+
+      <p>Based on the commit outputs, I opened the <b>backupy</b> directory and inspected each <b>.py</b> file. One by one I opened them until I came across <b>fileman.py</b>:</p>
+
+      <div class="image-container">
+        <a href="assets/D8_09.png"><img src="assets/D8_09.png" alt="fileman.py with Base64 encoded string"></a>
+        <p class="img-caption">fileman.py — suspicious Base64-encoded string discovered &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <p>Very suspicious — something is encoded in Base64. Open <a href="https://gchq.github.io/CyberChef/" target="_blank">CyberChef</a> and use <b>From Base64</b>:</p>
+
+      <div class="image-container">
+        <a href="assets/D8_10.png"><img src="assets/D8_10.png" alt="CyberChef From Base64 first layer"></a>
+        <p class="img-caption">CyberChef — first Base64 decode reveals another layer of encoding &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <p>The content is nested within another layer of Base64 encoding. After going through each item by copying and pasting each Base64 hash into a new recipe tab, I obtained the final result:</p>
+
+      <div class="image-container">
+        <a href="assets/D8_11.png"><img src="assets/D8_11.png" alt="CyberChef final decode — IP address revealed"></a>
+        <p class="img-caption">CyberChef — final decode reveals the malicious IPv4 address — that's our flag! &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+    </div>
+
+    <div class="writeup-section" id="mitre">
+      <h2>MITRE ATT&amp;CK</h2>
+      <p>In this challenge, we inspected and restored the files for the git directory and discovered the changes made to the repository.</p>
+      <h3>Tactics</h3>
+      <p>This tactic falls under <a href="https://attack.mitre.org/tactics/TA0042/" target="_blank">TA0042 — Resource Development</a> and <a href="https://attack.mitre.org/tactics/TA0005/" target="_blank">TA0005 — Defense Evasion</a>, as Shadow Gopher leveraged a public GitHub repository to modify source code to obtain capabilities for execution and evade Personalyz.io's defenses.</p>
+      <h3>Techniques</h3>
+      <p>This technique falls under <a href="https://attack.mitre.org/techniques/T1588/" target="_blank">T1588 — Obtain Capabilities</a> and <a href="https://attack.mitre.org/techniques/T1027/" target="_blank">T1027 — Obfuscated Files or Information</a> as Shadow Gopher modified existing source code in a public repository and used Base64 to obfuscate the malicious commit.</p>
+      <h3>Procedures</h3>
+      <p>Shadow Gopher modified a public GitHub repository by adding obfuscated source code encoded in Base64 to obtain the capabilities to use the code for persistence and exfiltration.</p>
+    </div>
+
+    <div class="writeup-section" id="mitigation">
+      <h2>Mitigation</h2>
+      <p>The following mitigation measures can be applied to this TTP.</p>
+      <table class="writeup-table">
+        <thead><tr><td>Mitigation</td><td>Description</td></tr></thead>
+        <tbody>
+          <tr><td><a href="https://attack.mitre.org/mitigations/M1056/" target="_blank">M1056 — Pre-Compromise</a></td><td>This technique cannot be easily mitigated with preventative controls as the repository belonged to a user outside of the Personalyz.io organization.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="writeup-section" id="detection">
+      <h2>Detection</h2>
+      <p>The following detection data sources are applicable to this TTP.</p>
+      <table class="writeup-table">
+        <thead><tr><td>Data Source</td><td>Description</td></tr></thead>
+        <tbody>
+          <tr><td><a href="https://attack.mitre.org/mitigations/M1019/" target="_blank">M1019 — Threat Intelligence Program</a></td><td>Proactively identifying and analyzing cyber threats by leveraging internal and external data sources. Leveraging frameworks like MITRE ATT&amp;CK to map intelligence to adversary TTPs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <aside class="toc">
+    <div class="toc-title">// TABLE OF CONTENTS</div>
+    <ul>
+      <li><a href="#challenge">1. Challenge</a></li>
+      <li class="toc-sub"><a href="#challenge">Objectives</a></li>
+      <li class="toc-sub"><a href="#challenge">Flag Format</a></li>
+      <li class="toc-sub"><a href="#challenge">Required Tools</a></li>
+      <li><a href="#solution">2. Solution</a></li>
+      <li><a href="#mitre">3. MITRE ATT&amp;CK</a></li>
+      <li class="toc-sub"><a href="#mitre">Tactics</a></li>
+      <li class="toc-sub"><a href="#mitre">Techniques</a></li>
+      <li class="toc-sub"><a href="#mitre">Procedures</a></li>
+      <li><a href="#mitigation">4. Mitigation</a></li>
+      <li><a href="#detection">5. Detection</a></li>
+    </ul>
+  </aside>
+</div>
+
+<footer>
+  <span class="footer-copy" id="site-copyright"></span>
+  <span class="footer-tag">[ STAY CURIOUS // STAY SHARP // END TRANSMISSION ]</span>
+</footer>
+<script src="../main.js"></script>
+</body>
+</html>

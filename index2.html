@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>// JACK_IN :: WIRE_TRIP</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="#hero" class="nav-logo">SYS_<span>HRTBRKRNR</span>.exe</a>
+  <ul class="nav-links">
+    <li><a href="#about">ABOUT</a></li>
+    <li><a href="#ctf">CTF</a></li>
+    <li><a href="#articles">ARTICLES</a></li>
+    <li><a href="#contact">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about"    onclick="closeMenu()">ABOUT</a>
+  <a href="#ctf"      onclick="closeMenu()">CTF WRITE-UPS</a>
+  <a href="#articles" onclick="closeMenu()">ARTICLES</a>
+  <a href="#contact"  onclick="closeMenu()">CONTACT</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-content">
+    <p class="hero-tag">&gt;_ INITIALIZING PORTFOLIO . . . [ACCESS GRANTED]</p>
+    <h1 class="hero-name">
+      <div class="line2" data-text="HRTBRKRNR">HRTBRKRNR</div>
+    </h1>
+    <p class="hero-title">[ BREAKING HEARTS ACROSS THE NET ]</p>
+    <div class="hero-roles">
+      <div class="role-line">
+        <span class="role-prompt">&gt;_&nbsp;</span>
+        <span class="role-text">CYBERSECURITY ANALYST</span>
+        <span class="role-dots">................................</span>
+        <span class="role-status">[LOADED]</span>
+      </div>
+      <div class="role-line">
+        <span class="role-prompt">&gt;_&nbsp;</span>
+        <span class="role-text">CTF RUNNER</span>
+        <span class="role-dots">................................</span>
+        <span class="role-status">[LOADED]</span>
+      </div>
+      <div class="role-line">
+        <span class="role-prompt">&gt;_&nbsp;</span>
+        <span class="role-text">CYBERPUNK ENTHUSIAST</span>
+        <span class="role-dots">................................</span>
+        <span class="role-status">[LOADED]</span>
+      </div>
+    </div>
+    <p class="hero-bio">
+        Walking the edge of the neon network — exploring systems, uncovering insights, and following the signal wherever curiosity leads.
+    </p>
+    <div class="hero-cta">
+      <a href="#ctf" class="btn btn-primary">VIEW CTF WRITE-UPS</a>
+      <a href="#contact" class="btn btn-outline">OPEN COMMS CHANNEL</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-pill">
+        <span class="stat-num">1</span>
+        <span class="stat-label">CTF CHALLENGES</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-num">5+</span>
+        <span class="stat-label">YRS EXPERIENCE</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-num">10+</span>
+        <span class="stat-label">CERTIFICATIONS</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-avatar">
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-br"></div>
+    <div class="avatar-img-placeholder">
+           <img src="assets/cyberpunk.png" alt="LOLBAS" style="width:100%;height:100%;object-fit:cover;">
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">ABOUT <span>ME</span></h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="about-grid" style="align-items: stretch;">
+
+      <div class="terminal-block" style="display: flex; flex-direction: column;">
+        <div class="terminal-bar">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span class="terminal-title">about_me.txt</span>
+        </div>
+        <div class="terminal-body" style="flex: 1;">
+          <div><span class="t-prompt">❯ </span><span class="t-cmd">whoami</span></div>
+          <div><span class="t-val">GhostDaemon</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-prompt">❯ </span><span class="t-cmd">cat about_me.txt</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-comment">// ─── ORIGIN PROTOCOL ───</span></div>
+          <div class="t-val" style="line-height:1.85; white-space: normal;">
+            My path into cybersecurity is anything but conventional. I started behind the computer, working as a photographic retoucher, photo assistant and photographer, before making the pivot into this field through self-study, hands-on practice, and the kind of mentors who ask better questions than they give answers. Speaking of which: I’m a firm believer that the only dumb question is the one you were too afraid to ask.
+          </div>
+          <div>&nbsp;</div>
+          <div class="t-val" style="line-height:1.85; white-space: normal;">
+            One of my proudest accomplishments was being selected for the 2024–2025 WiCyS + SANS Security Training Scholarship, a program that lit a fire under my technical growth and deepened my commitment to this field more than I anticipated.
+          </div>
+          <div>&nbsp;</div>
+          <div class="t-val" style="line-height:1.85; white-space: normal;">
+            You’ll find me 6 cups of coffee deep in CTF challenges, documenting techniques, and sharing what I learn with the community. Off the net: board games, puzzles, Dungeons & Dragons, and logging entirely unreasonable hours in Night City. I do occasionally touch grass.
+          </div>
+          <div>&nbsp;</div>
+          <div class="t-val" style="line-height:1.85; white-space: normal;">
+            I believe the best defenders think like attackers, so I stay sharp on both sides of the wire. Always stay curious and keep moving forward.
+          </div>
+          <div>&nbsp;</div>
+          <div><span class="t-prompt">❯ </span><span class="t-cursor"></span></div>
+        </div>
+      </div>
+
+      <div class="terminal-block" style="display: flex; flex-direction: column;">
+        <div class="terminal-bar">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span class="terminal-title">analyst_profile.json</span>
+        </div>
+        <div class="terminal-body" style="flex: 1;">
+          <div><span class="t-prompt">❯ </span><span class="t-cmd">cat analyst_profile.json</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-comment">// ─── CORE DATA ───</span></div>
+          <div><span class="t-key">name</span>      <span class="t-val">: "[REDACTED]"</span></div>
+          <div><span class="t-key">alias</span>     <span class="t-val">: "HRTBRKRNR"</span></div>
+          <div><span class="t-key">location</span>  <span class="t-val">: "[REDACTED]"</span></div>
+          <div><span class="t-key">focus</span>     <span class="t-val">: "Blue Team & Threat Hunting"</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-comment">// ─── SPECIALTIES ───</span></div>
+          <div><span class="t-key">primary</span>   <span class="t-val">: "Blue Team"</span></div>
+          <div><span class="t-key">secondary</span> <span class="t-val">: "Linux and Windows Commandline"</span></div>
+          <div><span class="t-key">tertiary</span>  <span class="t-val">: "OSINT"</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-comment">// ─── SECRET WEAPONS ───</span></div>
+          <div><span class="t-key">secret_weapon</span> <span class="t-val">: "LOLBAS"</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-comment">// ─── KNOWN VULNERABILITIES ───</span></div>
+          <div><span class="t-key">weakness</span>    <span class="t-val">: "Broken Coffee Machine"</span></div>
+          <div><span class="t-key">weakness_02</span> <span class="t-val">: "Always losing track of lipgloss"</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-comment">// ─── FAVORITE QUOTE ───</span></div>
+          <div><span class="t-key">quote</span>     <span class="t-val">: "The most exciting phrase to hear in</span></div>
+          <div><span class="t-val">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;science, the one that heralds the most</span></div>
+          <div><span class="t-val">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;discoveries, is not ‘Eureka!’ but</span></div>
+          <div><span class="t-val">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;’That’s funny...’"</span></div>
+          <div><span class="t-key">author</span>    <span class="t-val">: "Isaac Asimov"</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-key">status</span>    <span class="t-val">: "ONLINE"</span> <span class="t-cursor"></span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="display: flex; justify-content: center; margin-top: 1.5rem;">
+      <div class="hidden-terminal" style="max-width: 700px; width: 100%;">
+        <div class="terminal-bar">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span class="terminal-title">classified_access.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="t-prompt">❯ </span><span class="t-cmd">ls -la</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-val">drwx------&nbsp;&nbsp;2&nbsp;&nbsp;hrtbrknetr&nbsp;&nbsp;netrunners&nbsp;&nbsp;847362&nbsp;&nbsp;Aug 17 23:35&nbsp;&nbsp;.lore</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-comment">// ACCESS LEVEL: INSUFFICIENT</span></div>
+          <div><span style="color: var(--magenta); text-shadow: var(--glow-magenta);">// ACTION REQUIRED: type passphrase to unlock access</span></div>
+          <div><span class="t-comment">// HINT: initiate the protocol, netrunner.</span></div>
+          <div>&nbsp;</div>
+          <div class="terminal-input-row">
+            <span class="t-prompt">❯&nbsp;</span>
+            <input type="text" id="loreInput" class="terminal-input" placeholder="type here..." autocomplete="off" spellcheck="false" style="caret-color: var(--green-neon);">
+          </div>
+          <div id="loreOutput" class="terminal-output"></div>
+          <div style="padding-bottom: 2rem;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ CTF WRITE-UPS ═══ -->
+<section id="ctf">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">CTF <span>WRITE-UPS</span></h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="articles-list">
+
+      <div class="ctf-terminal" id="ctfTerminal">
+        <div class="terminal-bar">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span class="terminal-title">ctf_index.sh</span>
+        </div>
+        <div class="terminal-body" id="ctfTerminalBody">
+          <div><span style="color: var(--magenta); text-shadow: var(--glow-magenta);">// CTF WRITE-UP NAVIGATOR — TYPE 'help' TO BEGIN</span></div>
+          <div>&nbsp;</div>
+        </div>
+        <div class="terminal-input-row" style="padding: .5rem 1rem .85rem;">
+          <span class="t-prompt">❯&nbsp;</span>
+          <input type="text" id="ctfInput" class="terminal-input" placeholder="type here..." autocomplete="off" spellcheck="false" style="caret-color: var(--green-neon);">
+        </div>
+      </div>
+
+      <a href="target-defense-2025.html" class="article-row">
+        <span class="article-date">2025</span>
+        <div>
+          <div class="article-title">WiCyS: Target Defense Challenge 2025</div>
+          <div class="article-subtitle">Write-ups related to the WiCyS Target Defense Challenge: Burrowing the Business.</div>
+        </div>
+        <span class="article-arrow">→</span>
+      </a>
+
+      <div class="article-row" style="opacity: 0.45; cursor: not-allowed;">
+        <span class="article-date">2026</span>
+        <div>
+          <div class="article-title">&gt;_ INCOMING TRANSMISSION — SIGNAL LOCKED</div>
+          <div class="article-subtitle">// COMING SOON: 2026 WiCyS + SANS + Flare CTF: Sisterhood of the Traveling Packets</div>
+        </div>
+        <span class="article-arrow">▒</span>
+      </div>
+
+      <div class="article-row" style="opacity: 0.45; cursor: not-allowed;">
+        <span class="article-date">2025</span>
+        <div>
+          <div class="article-title">&gt;_ UPLINK INTERRUPTED — INCOMING DATA CORRUPTED</div>
+          <div class="article-subtitle">// Packet loss detected. Re-routing through backup nodes.</div>
+        </div>
+        <span class="article-arrow">▒</span>
+      </div>
+
+      <div class="article-row" style="opacity: 0.45; cursor: not-allowed;">
+        <span class="article-date">2025</span>
+        <div>
+          <div class="article-title">&gt;_ CHANNEL ENCRYPTED — AWAITING DECRYPTION KEY</div>
+          <div class="article-subtitle">// Access denied. Payload locked behind 256-bit cipher. Cracking in progress.</div>
+        </div>
+        <span class="article-arrow">▒</span>
+      </div>
+
+      <div class="article-row" style="opacity: 0.45; cursor: not-allowed;">
+        <span class="article-date">2025</span>
+        <div>
+          <div class="article-title">&gt;_ NODE OFFLINE — RE-ESTABLISHING CONNECTION</div>
+          <div class="article-subtitle">// Ghost protocol active. Write-up will surface when the net stabilizes.</div>
+        </div>
+        <span class="article-arrow">▒</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ ARTICLES ═══ -->
+<section id="articles">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">ARTICLES <span>&amp; RESEARCH</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <p class="hero-tag" style="margin-bottom: 2rem;">&gt;_ INITIALIZING ARTICLES . . . [COMING SOON]</p>
+
+    <div class="articles-list">
+
+      <div class="article-row" style="opacity: 0.45; cursor: not-allowed;">
+        <span class="article-date">[NULL]</span>
+        <div>
+          <div class="article-title">&gt;_ SIGNAL LOST — TRANSMISSION PENDING</div>
+          <div class="article-subtitle">// Article queued in the buffer. Awaiting signal lock. Stand by, netrunner.</div>
+        </div>
+        <span class="article-arrow">▒</span>
+      </div>
+
+      <div class="article-row" style="opacity: 0.45; cursor: not-allowed;">
+        <span class="article-date">[NULL]</span>
+        <div>
+          <div class="article-title">&gt;_ DATA FRAGMENT DETECTED — RECONSTRUCTION IN PROGRESS</div>
+          <div class="article-subtitle">// Partial payload recovered. Compiling remaining data blocks. Do not interrupt.</div>
+        </div>
+        <span class="article-arrow">▒</span>
+      </div>
+
+      <div class="article-row" style="opacity: 0.45; cursor: not-allowed;">
+        <span class="article-date">[NULL]</span>
+        <div>
+          <div class="article-title">&gt;_ UPLINK INTERRUPTED — REROUTING THROUGH BACKUP NODE</div>
+          <div class="article-subtitle">// Packet loss detected on primary channel. Re-establishing connection.</div>
+        </div>
+        <span class="article-arrow">▒</span>
+      </div>
+
+      <div class="article-row" style="opacity: 0.45; cursor: not-allowed;">
+        <span class="article-date">[NULL]</span>
+        <div>
+          <div class="article-title">&gt;_ PAYLOAD LOCKED — DECRYPTION KEY NOT FOUND</div>
+          <div class="article-subtitle">// Access denied. Content encrypted behind active cipher. Cracking in progress.</div>
+        </div>
+        <span class="article-arrow">▒</span>
+      </div>
+
+      <div class="article-row" style="opacity: 0.45; cursor: not-allowed;">
+        <span class="article-date">[NULL]</span>
+        <div>
+          <div class="article-title">&gt;_ GHOST PROTOCOL ACTIVE — NODE OFFLINE</div>
+          <div class="article-subtitle">// Transmission will surface when the net stabilizes. Keep scanning.</div>
+        </div>
+        <span class="article-arrow">▒</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ CERTIFICATIONS ═══ -->
+<section id="certs">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">CERTS <span>&amp; CREDENTIALS</span></h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="certs-grid">
+
+    <a href="https://www.credly.com/badges/60ee10e6-5b0d-4f2c-aef8-cd33da0ebaf7/public_url" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/gfact.png"></span>
+        <div>
+          <div class="cert-name">GIAC Foundational Cybersecurity Technologies (GFACT)</div>
+          <div class="cert-org">Global Information Assurance Certification (GIAC)</div>
+        </div>
+      </div>
+
+    <a href="https://www.credly.com/badges/a964a764-5585-462e-8108-2f2cc6454108/public_url" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/gsec.png"></span>
+        <div>
+          <div class="cert-name">GIAC Security Essentials Certification (GSEC)</div>
+          <div class="cert-org">Global Information Assurance Certification (GIAC)</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.credly.com/badges/eef31edf-16e3-4edc-a73c-fbacfbdbb78b/public_url" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/gcih.png"></span>
+        <div>
+          <div class="cert-name">GIAC Certified Incident Handler (GCIH)</div>
+          <div class="cert-org">Global Information Assurance Certification (GIAC)</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.credly.com/badges/13d45cd5-4b54-406c-a41b-682158c1027e/public_url" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/gccc.png"></span>
+        <div>
+          <div class="cert-name">GIAC Critical Controls Certification (GCCC)</div>
+          <div class="cert-org">Global Information Assurance Certification (GIAC)</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.credly.com/badges/e3285d34-1194-4358-8094-8792a6bda52c/public_url" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/giac_advisoryboard.png"></span>
+        <div>
+          <div class="cert-name">GIAC Advisory Board</div>
+          <div class="cert-org">Global Information Assurance Certification (GIAC)</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.credly.com/badges/5d9c0b1f-1eff-46ab-8fe7-27d6d97f551a/public_url" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/security+.png"></span>
+        <div>
+          <div class="cert-name">CompTIA Security+ ce Certification</div>
+          <div class="cert-org">CompTIA</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.credly.com/badges/644d982a-66f5-48bc-b689-dda00dc8b0a6/public_url" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/network+.png"></span>
+        <div>
+          <div class="cert-name">CompTIA Network+ ce Certification</div>
+          <div class="cert-org">COMPTIA</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.credly.com/badges/3d4379e9-6bac-451e-885d-72d86a1a5342/public_url" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/aws_cp.png"></span>
+        <div>
+          <div class="cert-name">AWS Certified Cloud Practitioner</div>
+          <div class="cert-org">Amazon Web Services Training and Certification</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.credly.com/badges/6c2b91e2-e318-466e-87c3-8da4729a9b52/public_url" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/aws_csaa.png"></span>
+        <div>
+          <div class="cert-name">AWS Certified Solutions Architect – Associate</div>
+          <div class="cert-org">Amazon Web Services Training and Certification</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.credly.com/badges/7f2001ca-b4c9-445c-ad4a-c2603da6a68f/public_url" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/isc2_cc.png"></span>
+        <div>
+          <div class="cert-name">Certified in Cybersecurity (CC)</div>
+          <div class="cert-org">ISC2</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://learn.justhacking.com/completion/6890645274e39971" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"><img src="assets/certs/JHT.png"></span>
+        <div>
+          <div class="cert-name">AI Cyber Defense Ops</div>
+          <div class="cert-org">JHT</div>
+        </div>
+      </div>
+    </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CERTIFICATIONS ═══ -->
+<section id="certs">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">PROFESSIONAL <span>AFFILIATIONS</span></h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="certs-grid">
+
+    <a href="https://www.wicys.org/" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"></span>
+        <div>
+          <div class="cert-name">Women in Cybersecurity</div>
+          <div class="cert-org">Member</div>          
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.isc2de.org/" target="_blank">
+      <div class="cert-card">
+        <span class="cert-badge"></span>
+        <div>
+          <div class="cert-name">ISC2 Delaware</div>
+          <div class="cert-org">Member Chair</div>
+        </div>
+      </div>
+    </a>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="container">
+    <p class="contact-tagline">&gt;_ OPEN A SECURE CHANNEL</p>
+    <h2 class="contact-title">LET'S <span>CONNECT</span></h2>
+    <p class="contact-sub">
+      Whether you want to collaborate on research, discuss a CTF challenge,
+      or talk shop — I'm reachable. Encryption preferred.
+    </p>
+
+    <div class="contact-links">
+      <a href="https://www.linkedin.com/in/amber-kirylak-641a9332/" target="_blank" class="social-btn">🔗 LINKEDIN</a>
+      <a href="https://tryhackme.com/p/HRTBRKRNR" target="_blank" class="social-btn">🎯 TRYHACKME</a>
+    </div>
+
+<!-- ═══ May include later; better, just ask!
+
+    <a href="#" class="btn btn-primary" style="font-size:.85rem; padding:1rem 2.5rem;">
+      DOWNLOAD RESUME
+    </a>
+    ═══ -->
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <span class="footer-copy">© 2025 Jane Phantom // All rights reserved</span>
+  <span class="footer-tag">[ STAY CURIOUS // STAY SHARP // END TRANSMISSION ]</span>
+</footer>
+
+<!-- Global JavaScript — loaded last for performance -->
+<script src="main.js"></script>
+
+</body>
+</html>

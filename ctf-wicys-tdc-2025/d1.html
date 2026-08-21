@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>// D1. Mystery Mail :: CTF WRITE-UP</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../style.css">
+
+  <style>
+    /* ════════════════════════════════════════
+       WRITE-UP SUBPAGE — LOCAL STYLES
+    ════════════════════════════════════════ */
+
+    .writeup-hero {
+      min-height: 36vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 7rem 2rem 3rem;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 70% 60% at 15% 60%, rgba(23,13,133,.5) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 90% 20%, rgba(211,74,232,.12) 0%, transparent 60%),
+        linear-gradient(180deg, #06040F 0%, #0E093D 70%, #06040F 100%);
+    }
+
+    .writeup-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(95,28,189,.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(95,28,189,.1) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridScroll 20s linear infinite;
+    }
+
+    .writeup-hero-content {
+      position: relative; z-index: 2;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--green-neon);
+      text-decoration: none;
+      letter-spacing: .12em;
+      margin-bottom: 1.5rem;
+      transition: text-shadow .2s;
+    }
+
+    .back-btn:hover { text-shadow: var(--glow-green); }
+
+    .writeup-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: .03em;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .writeup-title span { color: var(--magenta); text-shadow: var(--glow-magenta); }
+
+    .writeup-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-bottom: 1.2rem;
+      align-items: center;
+    }
+
+    .meta-badge {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      letter-spacing: .1em;
+      padding: .25rem .75rem;
+      border-radius: 2px;
+      border: 1px solid var(--grey-dim);
+      background: rgba(6,4,15,.6);
+      color: var(--white);
+    }
+
+    .meta-badge.difficulty-medium {
+      border-color: var(--yellow-neon);
+      color: var(--yellow-neon);
+      text-shadow: var(--glow-yellow);
+    }
+
+    .meta-badge.difficulty-hard {
+      border-color: var(--magenta);
+      color: var(--magenta);
+      text-shadow: var(--glow-magenta);
+    }
+
+    .meta-badge.difficulty-easy {
+      border-color: var(--green-neon);
+      color: var(--green-neon);
+      text-shadow: var(--glow-green);
+    }
+
+    .meta-badge.category {
+      border-color: var(--purple-vivid);
+      color: var(--magenta);
+      background: rgba(95,28,189,.2);
+    }
+
+    .meta-badge.points {
+      border-color: var(--green-neon);
+      color: var(--green-neon);
+    }
+
+    .writeup-tagline {
+      font-family: var(--font-mono);
+      font-size: .85rem;
+      color: rgba(240,238,248,.6);
+      letter-spacing: .08em;
+      font-style: italic;
+    }
+
+    .writeup-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 80px;
+      background: rgba(6,4,15,.8);
+      border: 1px solid var(--purple-vivid);
+      border-radius: 4px;
+      padding: 1.25rem;
+      box-shadow: var(--glow-purple);
+    }
+
+    .toc-title {
+      font-family: var(--font-display);
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--yellow-neon);
+      text-shadow: var(--glow-yellow);
+      letter-spacing: .15em;
+      margin-bottom: 1rem;
+      padding-bottom: .6rem;
+      border-bottom: 1px solid var(--grey-dim);
+    }
+
+    .toc ul { list-style: none; }
+    .toc ul li { margin-bottom: .4rem; }
+
+    .toc ul li a {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: rgba(240,238,248,.55);
+      text-decoration: none;
+      letter-spacing: .06em;
+      transition: color .2s, text-shadow .2s;
+      display: block;
+      padding: .2rem 0 .2rem .6rem;
+      border-left: 2px solid transparent;
+    }
+
+    .toc ul li a:hover {
+      color: var(--green-neon);
+      text-shadow: var(--glow-green);
+      border-left-color: var(--green-neon);
+    }
+
+    .toc ul li.toc-sub a {
+      padding-left: 1.4rem;
+      font-size: .68rem;
+    }
+
+    .writeup-section { margin-bottom: 3.5rem; }
+
+    .writeup-section h2 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--magenta);
+      text-shadow: var(--glow-magenta);
+      letter-spacing: .08em;
+      margin-bottom: 1.25rem;
+      padding-bottom: .6rem;
+      border-bottom: 1px solid var(--grey-dim);
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .writeup-section h2::before {
+      content: '//';
+      color: var(--purple-vivid);
+      font-size: .85rem;
+    }
+
+    .writeup-section h3 {
+      font-family: var(--font-display);
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--yellow-neon);
+      text-shadow: var(--glow-yellow);
+      letter-spacing: .1em;
+      margin: 1.75rem 0 .75rem;
+    }
+
+    .writeup-section p,
+    .writeup-section li {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: rgba(240,238,248,.75);
+      font-weight: 300;
+      line-height: 1.85;
+    }
+
+    .writeup-section ul,
+    .writeup-section ol {
+      margin: .75rem 0 .75rem 1.5rem;
+    }
+
+    .writeup-section li { margin-bottom: .35rem; }
+
+    .writeup-section a {
+      color: var(--magenta);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(211,74,232,.35);
+      transition: color .2s, border-color .2s, text-shadow .2s;
+    }
+
+    .writeup-section a:hover {
+      color: var(--green-neon);
+      text-shadow: var(--glow-green);
+      border-bottom-color: var(--green-neon);
+    }
+
+    .writeup-section b,
+    .writeup-section strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .code-block {
+      font-family: var(--font-mono);
+      font-size: .82rem;
+      color: var(--green-neon);
+      background: rgba(6,4,15,.9);
+      border: 1px solid var(--purple-vivid);
+      border-left: 3px solid var(--green-neon);
+      border-radius: 2px;
+      padding: .85rem 1.25rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+      box-shadow: inset 0 0 20px rgba(77,250,84,.03);
+      white-space: pre;
+    }
+
+    .code-block::before {
+      content: '❯ ';
+      color: var(--magenta);
+    }
+
+    .image-container {
+      margin: 1.25rem 0;
+    }
+
+    .image-container img {
+      width: 100%;
+      border: 1px solid var(--purple-vivid);
+      border-radius: 4px;
+      display: block;
+    }
+
+    .img-caption {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      color: rgba(240,238,248,.35);
+      letter-spacing: .08em;
+      margin-top: .4rem;
+      text-align: center;
+    }
+
+    .writeup-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: .9rem;
+    }
+
+    .writeup-table thead td {
+      font-family: var(--font-display);
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--yellow-neon);
+      text-shadow: var(--glow-yellow);
+      letter-spacing: .1em;
+      padding: .75rem 1rem;
+      background: rgba(95,28,189,.2);
+      border-bottom: 1px solid var(--purple-vivid);
+      border-top: 1px solid var(--purple-vivid);
+    }
+
+    .writeup-table thead td:first-child { border-left: 1px solid var(--purple-vivid); }
+    .writeup-table thead td:last-child  { border-right: 1px solid var(--purple-vivid); }
+
+    .writeup-table tbody tr {
+      border-bottom: 1px solid var(--grey-dim);
+      transition: background .2s;
+    }
+
+    .writeup-table tbody tr:hover { background: rgba(95,28,189,.08); }
+
+    .writeup-table tbody td {
+      padding: .85rem 1rem;
+      color: rgba(240,238,248,.7);
+      font-weight: 300;
+      line-height: 1.7;
+      vertical-align: top;
+      border-left: 1px solid var(--grey-dim);
+      border-right: 1px solid var(--grey-dim);
+    }
+
+    .writeup-table tbody td:first-child {
+      color: var(--magenta);
+      font-weight: 400;
+      white-space: nowrap;
+      width: 220px;
+    }
+
+    .writeup-table a { color: var(--magenta); }
+
+    .flag-box {
+      background: rgba(6,4,15,.9);
+      border: 1px solid var(--green-neon);
+      border-radius: 4px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--glow-green);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .flag-box-icon {
+      font-size: 1.8rem;
+      filter: drop-shadow(0 0 8px var(--green-neon));
+      flex-shrink: 0;
+    }
+
+    .flag-box-label {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      color: var(--green-neon);
+      text-shadow: var(--glow-green);
+      letter-spacing: .2em;
+      margin-bottom: .3rem;
+    }
+
+    .flag-box-value {
+      font-family: var(--font-mono);
+      font-size: .95rem;
+      color: var(--white);
+      letter-spacing: .08em;
+    }
+
+    @media (max-width: 900px) {
+      .writeup-layout {
+        grid-template-columns: 1fr;
+        padding: 2rem 1.25rem 4rem;
+      }
+      .toc { position: static; order: -1; }
+    }
+
+    @media (max-width: 600px) {
+      .writeup-meta { gap: .4rem; }
+      .writeup-table tbody td:first-child { white-space: normal; width: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="../index.html" class="nav-logo">SYS_<span>HRTBRKRNR</span>.exe</a>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">ABOUT</a></li>
+    <li><a href="../index.html#ctf">CTF</a></li>
+    <li><a href="../index.html#articles">ARTICLES</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="../index.html#about"    onclick="closeMenu()">ABOUT</a>
+  <a href="../index.html#ctf"      onclick="closeMenu()">CTF WRITE-UPS</a>
+  <a href="../index.html#articles" onclick="closeMenu()">ARTICLES</a>
+  <a href="../index.html#contact"  onclick="closeMenu()">CONTACT</a>
+</div>
+
+<!-- ═══ HERO BANNER ═══ -->
+<div class="writeup-hero">
+  <div class="writeup-hero-content">
+    <a href="../target-defense-2025.html" class="back-btn">← BACK TO CTF WRITE-UPS</a>
+    <h1 class="writeup-title">D1. <span>Mystery Mail</span></h1>
+    <div class="writeup-meta">
+      <span class="meta-badge difficulty-easy">★☆☆☆☆ EASY</span>
+      <span class="meta-badge points">100 PTS</span>
+      <span class="meta-badge category">EXTORTION</span>
+      <span class="meta-badge">WiCyS + Target Defense Challenge 2025: BURROWING THE BUSINESS</span>
+    </div>
+    <p class="writeup-tagline">&gt;_ Identify the malicious IP address in an extortion email.</p>
+  </div>
+</div>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<div class="writeup-layout">
+
+  <!-- ── LEFT: Article body ── -->
+  <div class="writeup-body">
+
+    <!-- CHALLENGE -->
+    <div class="writeup-section" id="challenge">
+      <h2>Challenge</h2>
+      <p>
+        What a way to start your day... you've just logged on as a member of Personalyz.io's Cybersecurity
+        team and see the last thing any cyber professional wants to see: an extortion email at the top of
+        your inbox. Looks like we've received a menacing message from an unknown sender, claiming that
+        sensitive data has been stolen from the company. The email demands a ransom and threatens to release
+        the data if the demand is not met within 48 hours.
+      </p>
+      <p>
+        Given the nature of the data we process, this is a serious threat to us and our customers.
+      </p>
+      <p>
+        You've been tasked with performing some analysis on the email itself to ensure our responding teams
+        can respond appropriately.
+      </p>
+      <p>To start, can you determine the sender's original IP address?</p>
+
+      <h3>Objectives</h3>
+      <p>Identify the sender's IP address using the attached email file.</p>
+      <p>Don't overthink it!</p>
+
+      <h3>Flag Format</h3>
+      <p>The flag will be a valid IP address, for example:</p>
+      <ul>
+        <li>242.229.211.211</li>
+        <li>243.151.196.173</li>
+      </ul>
+    </div>
+
+    <!-- SOLUTION -->
+    <div class="writeup-section" id="solution">
+      <h2>Solution</h2>
+      <p>
+        Inside the challenge is a file for you to download called <b>extortion_note.eml</b>. This is the
+        file you will need to identify the sender's IP address.
+      </p>
+      <p>
+        For this challenge, I will be downloading the file to my Kali Linux virtual machine. After
+        downloading the file, I used the following commands in terminal to help organize my folders for
+        this CTF. In the downloads folder, I used the following prompts.
+      </p>
+
+      <p>Make a new directory folder:</p>
+      <div class="code-block">mkdir D1</div>
+
+      <p>Move the file into the new directory:</p>
+      <div class="code-block">mv extortion_note.eml D1/</div>
+
+      <p>Change to the new directory:</p>
+      <div class="code-block">cd D1</div>
+
+      <p>Verify the file is in the new directory and review permissions:</p>
+      <div class="code-block">ls -l</div>
+
+      <p>Next, I used the concatenate command to read the contents of the file:</p>
+      <div class="code-block">cat extortion_note.eml</div>
+
+      <p>Below is the output:</p>
+      <div class="image-container">
+        <img src="assets/D1_02.png" alt="cat extortion_note.eml output">
+        <p class="img-caption">Terminal output of cat extortion_note.eml &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <p>
+        The objective is <b>Identify the sender's IP address using the attached email file.</b> Focus on
+        the header of the email where we received the email from.
+      </p>
+
+      <div class="image-container">
+        <img src="assets/D1_03.png" alt="Email header Received fields highlighted">
+        <p class="img-caption">Email header — Received fields showing the routing path &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <p>
+        We can see we have 3 <b>Received</b> sources from the email header. Here we identified the hops
+        or the route the email took to get from source to destination. The order in which the path is
+        listed is in timestamp DESC (descend) order. The path is broken down as follows:
+      </p>
+      <div class="code-block">252.44.98.29 >>> 250.24.46.164 >>> 251.14.1.16</div>
+      <p>
+        Thus, the source of the email has to be coming from IP address <b>252.44.98.29</b>.
+      </p>
+
+    </div>
+
+    <!-- MITRE ATT&CK -->
+    <div class="writeup-section" id="mitre">
+      <h2>MITRE ATT&amp;CK</h2>
+      <p>
+        In this challenge, we learned how to inspect the headers of an email <b>.eml</b> file to identify
+        the IP origin of the email. The reason why we have multiple received entries is, every time an
+        email passes through a mail server, it appends a received entry to the email along with the
+        timestamp. Thus, if we go with the very first entry, based on the timestamp, we were able to
+        identify the origin IP address.
+      </p>
+
+      <h3>Tactics</h3>
+      <p>
+        In the MITRE ATT&amp;CK framework, this tactic falls under
+        <a href="https://attack.mitre.org/tactics/TA0040/" target="_blank">TA0040 — Impact</a> as the
+        contents of the email imply that data has been exfiltrated and the attacker is extorting the
+        organization for monetary gain.
+      </p>
+
+      <h3>Techniques</h3>
+      <p>
+        In the MITRE ATT&amp;CK framework, this technique falls under
+        <a href="https://attack.mitre.org/techniques/T1657/" target="_blank">T1657 — Financial Theft</a>,
+        as the adversary is threatening to expose the data publicly if the ransom demands are not paid on time.
+      </p>
+
+      <h3>Procedures</h3>
+      <p>
+        Shadow Gopher sent an email to the Personalyz.io organization demanding a ransom payment within a
+        time limit or else the adversary will publish sensitive company and PII data.
+      </p>
+    </div>
+
+    <!-- MITIGATION -->
+    <div class="writeup-section" id="mitigation">
+      <h2>Mitigation</h2>
+      <p>
+        The following mitigation measures can be applied to this TTP. Click a link to view full details
+        in the MITRE ATT&amp;CK Framework.
+      </p>
+      <table class="writeup-table">
+        <thead>
+          <tr>
+            <td>Mitigation</td>
+            <td>Description</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="https://attack.mitre.org/mitigations/M1018/" target="_blank">M1018 — User Account Management</a></td>
+            <td>Implement and enforce policies for the lifecycle of user accounts including enforcing the
+            Principle of Least-Privilege, implementing Multi-Factor Authentication (MFA), strong password
+            policies and account lockout policies, and properly deactivating dormant accounts when not in use.</td>
+          </tr>
+          <tr>
+            <td><a href="https://attack.mitre.org/mitigations/M1017/" target="_blank">M1017 — User Training</a></td>
+            <td>Educate employees and contractors to recognize, report and prevent cyber threats that involve
+            phishing, social engineering and other human manipulative techniques. Security awareness training,
+            phishing simulations and role-based training are examples of user training.
+            <br><br>
+            It is important to note, all employees and contractors should have an easy-to-use method for
+            reporting emails in their email client.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DETECTION -->
+    <div class="writeup-section" id="detection">
+      <h2>Detection</h2>
+      <p>
+        The following detection data sources are applicable to this TTP. Click a link to view full details
+        in the MITRE ATT&amp;CK Framework.
+      </p>
+      <table class="writeup-table">
+        <thead>
+          <tr>
+            <td>Data Source</td>
+            <td>Description</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="https://attack.mitre.org/datasources/DS0015/" target="_blank">DS0015 — Application Logs</a></td>
+            <td>Email Application Logs contain metadata about emails sent, received, or blocked
+            (e.g., sender/receiver addresses, message IDs). These logs can be evaluated using a SIEM tool.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- end writeup-body -->
+
+  <!-- ── RIGHT: Table of Contents ── -->
+  <aside class="toc">
+    <div class="toc-title">// TABLE OF CONTENTS</div>
+    <ul>
+      <li><a href="#challenge">1. Challenge</a></li>
+      <li class="toc-sub"><a href="#challenge">Objectives</a></li>
+      <li class="toc-sub"><a href="#challenge">Flag Format</a></li>
+      <li><a href="#solution">2. Solution</a></li>
+      <li><a href="#mitre">3. MITRE ATT&amp;CK</a></li>
+      <li class="toc-sub"><a href="#mitre">Tactics</a></li>
+      <li class="toc-sub"><a href="#mitre">Techniques</a></li>
+      <li class="toc-sub"><a href="#mitre">Procedures</a></li>
+      <li><a href="#mitigation">4. Mitigation</a></li>
+      <li><a href="#detection">5. Detection</a></li>
+    </ul>
+  </aside>
+
+</div><!-- end writeup-layout -->
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <span class="footer-copy" id="site-copyright"></span>
+  <span class="footer-tag">[ STAY CURIOUS // STAY SHARP // END TRANSMISSION ]</span>
+</footer>
+
+<!-- Global JavaScript -->
+<script src="../main.js"></script>
+
+</body>
+</html>

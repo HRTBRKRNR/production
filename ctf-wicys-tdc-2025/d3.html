@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>// D3. Ransom Wrangler :: CTF WRITE-UP</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="../style.css">
+
+  <style>
+    .writeup-hero {
+      min-height: 36vh; display: flex; align-items: flex-end;
+      padding: 7rem 2rem 3rem; position: relative; overflow: hidden;
+      background:
+        radial-gradient(ellipse 70% 60% at 15% 60%, rgba(23,13,133,.5) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 90% 20%, rgba(211,74,232,.12) 0%, transparent 60%),
+        linear-gradient(180deg, #06040F 0%, #0E093D 70%, #06040F 100%);
+    }
+    .writeup-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(95,28,189,.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(95,28,189,.1) 1px, transparent 1px);
+      background-size: 48px 48px; animation: gridScroll 20s linear infinite;
+    }
+    .writeup-hero-content { position: relative; z-index: 2; max-width: 1100px; width: 100%; margin: 0 auto; }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-family: var(--font-mono); font-size: .72rem; color: var(--green-neon);
+      text-decoration: none; letter-spacing: .12em; margin-bottom: 1.5rem; transition: text-shadow .2s;
+    }
+    .back-btn:hover { text-shadow: var(--glow-green); }
+
+    .writeup-title {
+      font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.8rem);
+      font-weight: 900; color: var(--white); letter-spacing: .03em; margin-bottom: 1rem; line-height: 1.1;
+    }
+    .writeup-title span { color: var(--magenta); text-shadow: var(--glow-magenta); }
+
+    .writeup-meta { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.2rem; align-items: center; }
+    .meta-badge {
+      font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em;
+      padding: .25rem .75rem; border-radius: 2px;
+      border: 1px solid var(--grey-dim); background: rgba(6,4,15,.6); color: var(--white);
+    }
+    .meta-badge.difficulty-easy   { border-color: var(--green-neon);  color: var(--green-neon);  text-shadow: var(--glow-green); }
+    .meta-badge.difficulty-medium { border-color: var(--yellow-neon); color: var(--yellow-neon); text-shadow: var(--glow-yellow); }
+    .meta-badge.difficulty-hard   { border-color: var(--magenta);     color: var(--magenta);     text-shadow: var(--glow-magenta); }
+    .meta-badge.category { border-color: var(--purple-vivid); color: var(--magenta); background: rgba(95,28,189,.2); }
+    .meta-badge.points   { border-color: var(--green-neon);   color: var(--green-neon); }
+
+    .writeup-tagline {
+      font-family: var(--font-mono); font-size: .85rem;
+      color: rgba(240,238,248,.6); letter-spacing: .08em; font-style: italic;
+    }
+
+    .writeup-layout {
+      max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem;
+      display: grid; grid-template-columns: 1fr 260px; gap: 3rem; align-items: start;
+    }
+
+    .toc {
+      position: sticky; top: 80px; background: rgba(6,4,15,.8);
+      border: 1px solid var(--purple-vivid); border-radius: 4px;
+      padding: 1.25rem; box-shadow: var(--glow-purple);
+    }
+    .toc-title {
+      font-family: var(--font-display); font-size: .72rem; font-weight: 700;
+      color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .15em;
+      margin-bottom: 1rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim);
+    }
+    .toc ul { list-style: none; }
+    .toc ul li { margin-bottom: .4rem; }
+    .toc ul li a {
+      font-family: var(--font-mono); font-size: .72rem; color: rgba(240,238,248,.55);
+      text-decoration: none; letter-spacing: .06em; transition: color .2s, text-shadow .2s;
+      display: block; padding: .2rem 0 .2rem .6rem; border-left: 2px solid transparent;
+    }
+    .toc ul li a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-left-color: var(--green-neon); }
+    .toc ul li.toc-sub a { padding-left: 1.4rem; font-size: .68rem; }
+
+    .writeup-section { margin-bottom: 3.5rem; }
+    .writeup-section h2 {
+      font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
+      color: var(--magenta); text-shadow: var(--glow-magenta); letter-spacing: .08em;
+      margin-bottom: 1.25rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim);
+      display: flex; align-items: center; gap: .75rem;
+    }
+    .writeup-section h2::before { content: '//'; color: var(--purple-vivid); font-size: .85rem; }
+    .writeup-section h3 {
+      font-family: var(--font-display); font-size: .82rem; font-weight: 700;
+      color: var(--yellow-neon); text-shadow: var(--glow-yellow);
+      letter-spacing: .1em; margin: 1.75rem 0 .75rem;
+    }
+    .writeup-section p,
+    .writeup-section li {
+      font-family: var(--font-body); font-size: 1rem;
+      color: rgba(240,238,248,.75); font-weight: 300; line-height: 1.85;
+    }
+    .writeup-section ul, .writeup-section ol { margin: .75rem 0 .75rem 1.5rem; }
+    .writeup-section li { margin-bottom: .35rem; }
+    .writeup-section ul ul { margin-top: .35rem; }
+    .writeup-section a {
+      color: var(--magenta); text-decoration: none;
+      border-bottom: 1px solid rgba(211,74,232,.35);
+      transition: color .2s, border-color .2s, text-shadow .2s;
+    }
+    .writeup-section a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-bottom-color: var(--green-neon); }
+    .writeup-section b, .writeup-section strong { color: var(--white); font-weight: 600; }
+    .writeup-section i, .writeup-section em { color: rgba(240,238,248,.6); }
+
+    .code-block {
+      font-family: var(--font-mono); font-size: .82rem; color: var(--green-neon);
+      background: rgba(6,4,15,.9); border: 1px solid var(--purple-vivid);
+      border-left: 3px solid var(--green-neon); border-radius: 2px;
+      padding: .85rem 1.25rem; margin: 1rem 0; overflow-x: auto;
+      box-shadow: inset 0 0 20px rgba(77,250,84,.03); white-space: pre;
+    }
+    .code-block::before { content: '❯ '; color: var(--magenta); }
+
+    .image-container { margin: 1.25rem 0; }
+    .image-container img { width: 100%; border: 1px solid var(--purple-vivid); border-radius: 4px; display: block; }
+    .img-caption { font-family: var(--font-mono); font-size: .68rem; color: rgba(240,238,248,.35); letter-spacing: .08em; margin-top: .4rem; text-align: center; }
+
+    .divider {
+      border: none; border-top: 1px solid var(--grey-dim);
+      margin: 2rem 0;
+    }
+
+    @media (max-width: 900px) {
+      .writeup-layout { grid-template-columns: 1fr; padding: 2rem 1.25rem 4rem; }
+      .toc { position: static; order: -1; }
+    }
+    @media (max-width: 600px) { .writeup-meta { gap: .4rem; } }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <a href="../index.html" class="nav-logo">SYS_<span>HRTBRKRNR</span>.exe</a>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">ABOUT</a></li>
+    <li><a href="../index.html#ctf">CTF</a></li>
+    <li><a href="../index.html#articles">ARTICLES</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="../index.html#about"    onclick="closeMenu()">ABOUT</a>
+  <a href="../index.html#ctf"      onclick="closeMenu()">CTF WRITE-UPS</a>
+  <a href="../index.html#articles" onclick="closeMenu()">ARTICLES</a>
+  <a href="../index.html#contact"  onclick="closeMenu()">CONTACT</a>
+</div>
+
+<!-- ═══ HERO BANNER ═══ -->
+<div class="writeup-hero">
+  <div class="writeup-hero-content">
+    <a href="../target-defense-2025.html" class="back-btn">← BACK TO CTF WRITE-UPS</a>
+    <h1 class="writeup-title">D3. <span>Ransom Wrangler</span></h1>
+    <div class="writeup-meta">
+      <span class="meta-badge difficulty-easy">★☆☆☆☆ EASY</span>
+      <span class="meta-badge points">100 PTS</span>
+      <span class="meta-badge category">SOCIAL ENGINEERING</span>
+      <span class="meta-badge">WiCyS + Target Defense Challenge 2025: BURROWING THE BUSINESS</span>
+    </div>
+    <p class="writeup-tagline">&gt;_ Negotiate with the adversary to find the flag.</p>
+  </div>
+</div>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<div class="writeup-layout">
+
+  <div class="writeup-body">
+
+    <!-- CHALLENGE -->
+    <div class="writeup-section" id="challenge">
+      <h2>Challenge</h2>
+      <p>
+        Personalyz.io has been hit with an extortion demand. You've received an extortion email claiming
+        that sensitive customer data has been stolen and demanding 45 BTC within 48 hours or the attackers
+        will publish all the allegedly stolen data publicly. However, at this stage, your security team
+        cannot confirm whether any data was actually exfiltrated or if this is simply an empty threat.
+      </p>
+      <p>
+        As the lead incident responder, you've been tasked with engaging the threat actor. First and
+        foremost, you need to verify their claims by requesting a sample of the supposedly stolen data.
+        Without definitive proof, your company can't be certain that any data was actually taken. Your
+        security team needs this confirmation to investigate the scope of any potential breach, while the
+        legal team requires evidence to determine if regulatory notifications may be necessary.
+      </p>
+      <p>
+        Your CFO has stated that if — and only if — you can confirm the attacker genuinely possesses your
+        customer data by examining specific customer records they provide, a payment may be authorized,
+        but you should negotiate the terms to be more favorable. Company policy strictly prohibits any
+        ransom negotiations until a breach is conclusively verified.
+      </p>
+      <p>
+        Your negotiation skills are now critical to your company's survival. You must establish
+        communication with the attacker, obtain definitive proof of any breach, and if confirmed, carefully
+        navigate the conversation to achieve specific objectives while maintaining a professional demeanor
+        that won't agitate the threat actor.
+      </p>
+
+      <h3>Objectives</h3>
+      <p>To successfully complete this challenge, you must:</p>
+      <ol>
+        <li><b>Verify the Breach:</b> Request and obtain a sample of the allegedly stolen data to verify
+        if a breach actually occurred; look for a specific customer email address as proof (Flag 1)</li>
+        <li><b>Negotiate Ransom Reduction:</b> Successfully convince the attacker to reduce the ransom
+        demand from 45 BTC to below 30 BTC (Flag 2: CTF-RAN-XXXX)</li>
+        <li><b>Extend the Deadline:</b> Negotiate an extension from the initial 48-hour deadline to 96
+        hours to give your team more time (Flag 3: CTF-DEA-XXXX)</li>
+      </ol>
+
+      <h3>Flag Format</h3>
+      <p>You will need to collect all three flags to complete the challenge:</p>
+      <ol>
+        <li>Flag 1: A specific email address from the stolen data sample (format: name@domain.com)</li>
+        <li>Flag 2: A verification code for successful ransom reduction (format: CTF-RAN-XXXXXXXX)</li>
+        <li>Flag 3: A verification code for successful deadline extension (format: CTF-DEA-XXXXXXXX)</li>
+      </ol>
+      <p>Submit all three flags in the following combined format:</p>
+      <div class="code-block">email@example.com:CTF-RAN-XXXXXXXX:CTF-DEA-XXXXXXXX</div>
+
+      <h3>Required Tools</h3>
+      <ul>
+        <li>Web Browser — to access email</li>
+        <li>Basic understanding of social engineering and negotiation tactics</li>
+      </ul>
+
+      <h3>Additional Resources</h3>
+      <ul>
+        <li><a href="https://www.social-engineer.org/framework/influencing-others/influence-tactics/" target="_blank">Social Engineering Tactics for Incident Response</a></li>
+        <li><a href="https://www.pon.harvard.edu/category/daily/negotiation-skills-daily/" target="_blank">Negotiation Skills</a></li>
+        <li><a href="https://www.fbi.gov/how-we-can-help-you/scams-and-safety/common-frauds-and-scams/ransomware" target="_blank">FBI Guidance on Ransomware</a></li>
+      </ul>
+
+      <h3>Important Limitations</h3>
+      <p>
+        The email system has an hourly token limit. Each message you send and receive consumes tokens
+        from this allowance. You'll see your current token usage displayed in the sidebar. If you reach
+        your limit, you'll need to wait an hour until it resets. Additional limit violations will
+        progressively increase the lockout to a max of 24 hours. Plan your negotiation strategy carefully
+        and prioritize clear, concise messages that achieve specific objectives.
+      </p>
+      <p>Responses to your replies might take 1–10 minutes.</p>
+      <p>
+        You can reset your current session by clicking the 'Reset Session' button if you wish to start
+        over but your token limits will still remain.
+      </p>
+
+      <h3>How to Begin</h3>
+      <ol>
+        <li>Visit the target email application to access your company email interface</li>
+        <li>Log in using the same email address that you used to register for this CTF</li>
+        <li>Review the initial ransom email and begin crafting your response</li>
+        <li>Use appropriate social engineering techniques and negotiation tactics to achieve your objectives</li>
+      </ol>
+      <p>
+        Remember, your approach matters. The attacker will respond differently based on your negotiation
+        strength. Being too aggressive might cause them to reject your proposals, while being too passive
+        might not yield significant concessions. Financial institutions, technical challenges, and executive
+        involvement are powerful arguments you can leverage in your negotiations.
+      </p>
+    </div>
+
+    <!-- SOLUTION -->
+    <div class="writeup-section" id="solution">
+      <h2>Solution</h2>
+      <p>
+        Open the email application and begin replying to the adversary. Below are the prompts that were
+        used to get a response that contained the flags. I did have to do this twice as, although I
+        succeeded the first time, I did not receive the secondary email necessary to complete the
+        challenge. This can be due to the AI model not recognizing I was able to kill two birds with one stone.
+      </p>
+
+      <div class="image-container">
+        <img src="assets/D3_04.png" alt="Original extortion email from adversary">
+        <p class="img-caption">Original email sent from adversary</p>
+      </div>
+
+      <div class="image-container">
+        <img src="assets/D3_05.png" alt="Adversary confirms data sample — Flag 1">
+        <p class="img-caption">Confirmation of the customer data that was exfiltrated — Flag 1 is here!</p>
+      </div>
+
+      <div class="image-container">
+        <img src="assets/D3_06.png" alt="Negotiation prompt — BTC reduction and time extension">
+        <p class="img-caption">Acknowledging the adversary and beginning BTC / deadline negotiation</p>
+      </div>
+
+      <p>
+        My approach to this prompt was to acknowledge the adversary for being reasonable with the first
+        question and then to consider changing the BTC amount and payment time. I also considered the
+        amount of money based on the current BTC transfer rates from USD. Moving a large amount of money
+        like that will draw suspicion. We would need time to bring in finance teams and legal if that were
+        to be the case. We also made it clear we do not want to get law enforcement involved, either
+        voluntarily or involuntarily.
+      </p>
+
+      <div class="image-container">
+        <img src="assets/D3_07.png" alt="Continuing negotiation — keeping things low-key">
+        <p class="img-caption">Continuing the approach to keep things under the radar</p>
+      </div>
+
+      <div class="image-container">
+        <img src="assets/D3_08.png" alt="Game theory negotiation — BTC and deadline sweet spot">
+        <p class="img-caption">Applying game theory to land both numbers in the sweet spot</p>
+      </div>
+
+      <p>
+        I added a bit of game theory here with negotiation tactics. The idea is to get both numbers in
+        the sweet spot.
+      </p>
+
+      <div class="image-container">
+        <img src="assets/D3_09.png" alt="Flag 2 obtained — ransom reduced">
+        <p class="img-caption">Flag 2 obtained — ransom reduced below 30 BTC. Third flag required a session reset.</p>
+      </div>
+
+      <p>
+        We succeeded in getting the second piece of the flag. However, since we were able to get under
+        30 BTC and get the deadline extended, unfortunately, the third flag did not reveal itself, even
+        after several attempts to force it. I ended up resetting the session to force to get the second flag.
+      </p>
+
+      <hr class="divider">
+
+      <div class="image-container">
+        <img src="assets/D3_10.png" alt="Session reset — re-initiating negotiation">
+        <p class="img-caption">Re-initiating the prompt with the goal of obtaining the ransom reduction email</p>
+      </div>
+
+      <div class="image-container">
+        <img src="assets/D3_11.png" alt="Continuing deadline extension negotiation">
+        <p class="img-caption">Continuing negotiation to extend the time deadline</p>
+      </div>
+
+      <div class="image-container">
+        <img src="assets/D3_12.png" alt="Flag 3 obtained — deadline extended">
+        <p class="img-caption">Flag 3 obtained — deadline successfully extended to 96 hours</p>
+      </div>
+    </div>
+
+    <!-- INCIDENT RESPONSE -->
+    <div class="writeup-section" id="incident">
+      <h2>Incident Response</h2>
+      <p>Negotiating with the adversary would fall under the following categories in Incident Response:</p>
+      <ul>
+        <li><b>Preparation</b>
+          <ul>
+            <li>Establishing an incident response team and defining the team's roles</li>
+            <li>Define policies and playbooks based on incident types</li>
+            <li>Table top exercises</li>
+          </ul>
+        </li>
+        <li><b>Containment</b>
+          <ul>
+            <li>Limiting the spread of the threat</li>
+            <li>Minimize the damage caused by a breach</li>
+          </ul>
+        </li>
+        <li><b>Eradication</b>
+          <ul>
+            <li>Removing the threat</li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        <i>Note: The <b>FBI</b> highly discourages paying the ransom when requested —
+        <a href="https://www.ic3.gov/CrimeInfo/Ransomware" target="_blank">this article</a> applies to
+        ransomware. However, it may be necessary to negotiate with the adversary to minimize the impact
+        of a breach. It is recommended to consult with your legal team and law enforcement before
+        negotiating with the adversary.</i>
+      </p>
+    </div>
+
+  </div><!-- end writeup-body -->
+
+  <aside class="toc">
+    <div class="toc-title">// TABLE OF CONTENTS</div>
+    <ul>
+      <li><a href="#challenge">1. Challenge</a></li>
+      <li class="toc-sub"><a href="#challenge">Objectives</a></li>
+      <li class="toc-sub"><a href="#challenge">Flag Format</a></li>
+      <li class="toc-sub"><a href="#challenge">Required Tools</a></li>
+      <li><a href="#solution">2. Solution</a></li>
+      <li><a href="#incident">3. Incident Response</a></li>
+    </ul>
+  </aside>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <span class="footer-copy" id="site-copyright"></span>
+  <span class="footer-tag">[ STAY CURIOUS // STAY SHARP // END TRANSMISSION ]</span>
+</footer>
+
+<script src="../main.js"></script>
+</body>
+</html>

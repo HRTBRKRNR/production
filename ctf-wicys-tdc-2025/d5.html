@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>// D5. Ahoy, PCAP'n!s :: CTF WRITE-UP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .writeup-hero { min-height: 36vh; display: flex; align-items: flex-end; padding: 7rem 2rem 3rem; position: relative; overflow: hidden; background: radial-gradient(ellipse 70% 60% at 15% 60%, rgba(23,13,133,.5) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 90% 20%, rgba(77,250,84,.08) 0%, transparent 60%), linear-gradient(180deg, #06040F 0%, #0E093D 70%, #06040F 100%); }
+    .writeup-hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(95,28,189,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(95,28,189,.1) 1px, transparent 1px); background-size: 48px 48px; animation: gridScroll 20s linear infinite; }
+    .writeup-hero-content { position: relative; z-index: 2; max-width: 1100px; width: 100%; margin: 0 auto; }
+    .back-btn { display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-mono); font-size: .72rem; color: var(--green-neon); text-decoration: none; letter-spacing: .12em; margin-bottom: 1.5rem; transition: text-shadow .2s; }
+    .back-btn:hover { text-shadow: var(--glow-green); }
+    .writeup-title { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 900; color: var(--white); letter-spacing: .03em; margin-bottom: 1rem; line-height: 1.1; }
+    .writeup-title span { color: var(--yellow-neon); text-shadow: var(--glow-yellow); }
+    .writeup-meta { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.2rem; align-items: center; }
+    .meta-badge { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; padding: .25rem .75rem; border-radius: 2px; border: 1px solid var(--grey-dim); background: rgba(6,4,15,.6); color: var(--white); }
+    .meta-badge.difficulty-medium { border-color: var(--yellow-neon); color: var(--yellow-neon); text-shadow: var(--glow-yellow); }
+    .meta-badge.category { border-color: var(--purple-vivid); color: var(--magenta); background: rgba(95,28,189,.2); }
+    .meta-badge.points { border-color: var(--yellow-neon); color: var(--yellow-neon); }
+    .writeup-tagline { font-family: var(--font-mono); font-size: .85rem; color: rgba(240,238,248,.6); letter-spacing: .08em; font-style: italic; }
+    .writeup-layout { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; display: grid; grid-template-columns: 1fr 260px; gap: 3rem; align-items: start; }
+    .toc { position: sticky; top: 80px; background: rgba(6,4,15,.8); border: 1px solid var(--purple-vivid); border-radius: 4px; padding: 1.25rem; box-shadow: var(--glow-purple); }
+    .toc-title { font-family: var(--font-display); font-size: .72rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .15em; margin-bottom: 1rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim); }
+    .toc ul { list-style: none; } .toc ul li { margin-bottom: .4rem; }
+    .toc ul li a { font-family: var(--font-mono); font-size: .72rem; color: rgba(240,238,248,.55); text-decoration: none; letter-spacing: .06em; transition: color .2s, text-shadow .2s; display: block; padding: .2rem 0 .2rem .6rem; border-left: 2px solid transparent; }
+    .toc ul li a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-left-color: var(--green-neon); }
+    .writeup-section { margin-bottom: 3.5rem; }
+    .writeup-section h2 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--magenta); text-shadow: var(--glow-magenta); letter-spacing: .08em; margin-bottom: 1.25rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim); display: flex; align-items: center; gap: .75rem; }
+    .writeup-section h2::before { content: '//'; color: var(--purple-vivid); font-size: .85rem; }
+    .writeup-section h3 { font-family: var(--font-display); font-size: .9rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .08em; margin: 1.5rem 0 .75rem; }
+    .writeup-section p { font-family: var(--font-body); font-size: 1rem; color: rgba(240,238,248,.75); font-weight: 300; line-height: 1.85; }
+    .writeup-section ul, .writeup-section ol { font-family: var(--font-body); font-size: 1rem; color: rgba(240,238,248,.75); font-weight: 300; line-height: 1.85; padding-left: 1.5rem; margin: .75rem 0; }
+    .writeup-section li { margin-bottom: .35rem; }
+    .writeup-section ul ul, .writeup-section ol ul { margin-top: .35rem; }
+    .writeup-section b, .writeup-section strong { color: var(--white); font-weight: 600; }
+    .writeup-section a { color: var(--magenta); text-decoration: none; border-bottom: 1px solid rgba(211,74,232,.35); transition: color .2s, border-color .2s, text-shadow .2s; }
+    .writeup-section a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-bottom-color: var(--green-neon); }
+    .code-block { font-family: var(--font-mono); font-size: .82rem; color: var(--green-neon); background: rgba(6,4,15,.9); border: 1px solid var(--purple-vivid); border-left: 3px solid var(--green-neon); border-radius: 2px; padding: .85rem 1.25rem; margin: 1rem 0; overflow-x: auto; white-space: pre; }
+    .code-block::before { content: '❯ '; color: var(--magenta); }
+    .code-inline { font-family: var(--font-mono); font-size: .88rem; background: rgba(95,28,189,.18); border: 1px solid rgba(95,28,189,.4); border-radius: 3px; padding: .1rem .4rem; color: var(--magenta); }
+    .screenshot { display: block; max-width: 100%; border: 1px solid var(--purple-vivid); border-radius: 4px; margin: 1.25rem 0; box-shadow: var(--glow-purple); }
+    .screenshot-caption { font-family: var(--font-mono); font-size: .72rem; color: rgba(240,238,248,.4); letter-spacing: .08em; margin-top: -.75rem; margin-bottom: 1.25rem; }
+    .flag-box { background: rgba(6,4,15,.9); border: 1px solid var(--green-neon); border-radius: 4px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; box-shadow: var(--glow-green); display: flex; align-items: center; gap: 1rem; }
+    .flag-box-icon { font-size: 1.8rem; filter: drop-shadow(0 0 8px var(--green-neon)); flex-shrink: 0; }
+    .flag-box-label { font-family: var(--font-mono); font-size: .65rem; color: var(--green-neon); text-shadow: var(--glow-green); letter-spacing: .2em; margin-bottom: .3rem; }
+    .flag-box-value { font-family: var(--font-mono); font-size: .95rem; color: var(--white); letter-spacing: .08em; }
+    .writeup-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+    .writeup-table thead td { font-family: var(--font-display); font-size: .72rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .1em; padding: .75rem 1rem; background: rgba(95,28,189,.2); border: 1px solid var(--purple-vivid); }
+    .writeup-table tbody tr { border-bottom: 1px solid var(--grey-dim); transition: background .2s; }
+    .writeup-table tbody tr:hover { background: rgba(95,28,189,.08); }
+    .writeup-table tbody td { padding: .85rem 1rem; color: rgba(240,238,248,.7); font-weight: 300; line-height: 1.7; vertical-align: top; border-left: 1px solid var(--grey-dim); border-right: 1px solid var(--grey-dim); }
+    .writeup-table tbody td:first-child { color: var(--magenta); font-weight: 400; white-space: nowrap; width: 220px; }
+    .writeup-table a { color: var(--magenta); text-decoration: none; border-bottom: none; }
+    .writeup-table a:hover { color: var(--green-neon); text-shadow: var(--glow-green); }
+    @media (max-width: 900px) { .writeup-layout { grid-template-columns: 1fr; padding: 2rem 1.25rem 4rem; } .toc { position: static; order: -1; } }
+    @media (max-width: 600px) { .writeup-meta { gap: .4rem; } .writeup-table tbody td:first-child { white-space: normal; width: auto; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">SYS_<span>HRTBRKRNR</span>.exe</a>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">ABOUT</a></li>
+    <li><a href="../index.html#ctf">CTF</a></li>
+    <li><a href="../index.html#articles">ARTICLES</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="../index.html#about"    onclick="closeMenu()">ABOUT</a>
+  <a href="../index.html#ctf"      onclick="closeMenu()">CTF WRITE-UPS</a>
+  <a href="../index.html#articles" onclick="closeMenu()">ARTICLES</a>
+  <a href="../index.html#contact"  onclick="closeMenu()">CONTACT</a>
+</div>
+
+<div class="writeup-hero">
+  <div class="writeup-hero-content">
+    <a href="../target-defense-2025.html" class="back-btn">← BACK TO CTF WRITE-UPS</a>
+    <h1 class="writeup-title">D5. <span>Ahoy, PCAP'n!s</span></h1>
+    <div class="writeup-meta">
+      <span class="meta-badge difficulty-medium">★★★☆☆ MEDIUM</span>
+      <span class="meta-badge points">300 PTS</span>
+      <span class="meta-badge category">NETWORK PROTOCOLS</span>
+      <span class="meta-badge">WiCyS + Target Defense Challenge 2025: BURROWING THE BUSINESS</span>
+    </div>
+    <p class="writeup-tagline">&gt;_ Dive into (Wire)Shark-infested waters and find the C2 treasure.</p>
+  </div>
+</div>
+
+<div class="writeup-layout">
+  <div class="writeup-body">
+
+    <div class="writeup-section" id="challenge">
+      <h2>Challenge</h2>
+      <p>The threat actor (TA) has contacted us with their demands and now we have some "evidence" of what sensitive data may have been stolen. But how did they get the sensitive data in the first place? And importantly, do we need to worry about them still being active in our environment?</p>
+      <p>We've received an alert that may be related to this threat actor activity and could clue us in as to where and how they stole the data they are now ransoming. But where exactly are they and what are they doing, besides holding your sensitive data for ransom?</p>
+      <ul>
+        <li>Pirating your super-secret client-monitoring software?</li>
+        <li>Stealing your intellectual property or your confidential financial plans for next year?</li>
+        <li>Hijacking your social media feed?</li>
+        <li>Coercing your company systems into acting as a botnet crew for their nefarious purposes?</li>
+      </ul>
+      <p>In the vast ocean of network traffic monitored by the company's Network Security team, you need to find out:</p>
+      <ul>
+        <li>the compromised machine's name</li>
+        <li>and the Command-and-Control (C2) IP address of the threat actor (where they are sending the data to)</li>
+      </ul>
+      <p>The Network Security team has packet captures ("PCAPs") of the company's network traffic around the time of the alert, but due to a tight Information Technology (IT) budget and a lack of resources, it's limited to a small window of time.</p>
+      <p>Great. Sarcastically send a reminder to yourself to make the IT team "walk the plank!" for how much this corner-cutting will cost the company!</p>
+      <p>You'll just have to work with what's available, and the clues the Incident Management team has provided about the TA's demands. Time to get your hands dirty and start digging (or swimming) through the PCAPs! Take the leap into the (Wire)Shark-infested waters and find the treasure!</p>
+
+      <h3>Objectives</h3>
+      <p>This challenge is to identify which machine is sending the stolen data out of your environment and where it went, by looking at how protocols can be used and abused for malicious intent.</p>
+      <p>From the provided PCAP file, you need to identify 2 important pieces of information:</p>
+      <ul>
+        <li>the name of our compromised machine sending our super-secret data</li>
+        <li>the Command-and-Control (C2) IP address the data is being sent to, where the TA is doing their dirty work</li>
+      </ul>
+
+      <h3>Flag Format</h3>
+      <p>The flag should be in the format:</p>
+      <div class="code-block">[compromised-hostname]_[C2-IP]</div>
+      <p>For example, if the <code class="code-inline">[compromised-hostname]</code> is <code class="code-inline">gaming-PS4</code> and the C2 IP address is <code class="code-inline">1.2.3.4</code>, these flags would be accepted:</p>
+      <ul>
+        <li><code class="code-inline">gaming-PS4_1.2.3.4</code></li>
+        <li><code class="code-inline">GaMiNg-pS4_1.2.3.4</code> — the case doesn't matter</li>
+      </ul>
+
+      <h3>Required Tools</h3>
+      <ul>
+        <li>Wireshark packet analysis tool or a similar packet analysis tool. Wireshark is recommended, free, available for Windows, macOS and Linux, and the hints will be based on it.</li>
+        <li><a href="https://www.wireshark.org/docs/" target="_blank">Documentation and tutorials for reference.</a></li>
+      </ul>
+
+      <h3>Additional Resources</h3>
+      <p>Ports and protocols in common use:</p>
+      <ul>
+        <li><a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers" target="_blank">Wikipedia — List of TCP and UDP port numbers</a></li>
+        <li><a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml" target="_blank">IANA — Service Name and Port Number Registry</a>
+          <ul>
+            <li>More detailed if you want it, but less user-friendly and not necessary for the challenge; Wikipedia is sufficient.</li>
+            <li>Note: IANA is the official source for port numbers, but Wikipedia is often easier to read and understand.</li>
+            <li>Also note that the IANA list is more comprehensive spanning many pages, but for this challenge, you only need the common ports.</li>
+          </ul>
+        </li>
+        <li>Network protocols overview:
+          <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Communication_protocol" target="_blank">Wikipedia — Communication protocol</a> — there's a ton of info here, for further reading if you want it</li>
+            <li><a href="https://www.iana.org/protocols" target="_blank">IANA — Protocol Registries</a> — more detailed if you want it, but not necessary for the challenge; Wikipedia is sufficient</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="writeup-section" id="solution">
+      <h2>Solution</h2>
+      <p>In this challenge we are supplied with a pcap file called <strong>pirates.pcap</strong>. After downloading the file, organize your working directory in Kali Linux with the following commands. If you do not have Wireshark, use the resource links provided to download and install it.</p>
+      <p>Make a new directory:</p>
+      <div class="code-block">mkdir D5</div>
+      <p>Move the file into the new directory:</p>
+      <div class="code-block">mv pirates.pcap D5/</div>
+      <p>Change to the new directory:</p>
+      <div class="code-block">cd D5</div>
+      <p>Verify the file is in the new directory and review permissions:</p>
+      <div class="code-block">ls -l</div>
+      <p>Open the pcap file in Wireshark:</p>
+      <div class="code-block">wireshark pirates.pcap &</div>
+      <p>Inside the application, we can see the traffic captured around the time of the alert. Notice the following protocols:</p>
+      <ul>
+        <li>TCP</li>
+        <li>ARP</li>
+        <li>ICMP</li>
+        <li>MDNS</li>
+        <li>DNS</li>
+        <li>HTTP</li>
+      </ul>
+      <a href="assets/D5_04.png"><img src="assets/D5_04.png" alt="Wireshark showing captured traffic with protocol overview" class="screenshot"></a>
+      <p class="screenshot-caption">// Click image to enlarge — Wireshark packet capture overview of pirates.pcap</p>
+
+      <p>There are a lot of packets to inspect with these protocols. Instead of inspecting traffic one at a time, let's first use statistics to determine the network endpoints detected in the packet capture. At the top menu bar, click on <strong>Statistics</strong> and then <strong>Endpoints</strong>.</p>
+      <img src="assets/D5_05.png" alt="Wireshark Statistics menu — Endpoints option" class="screenshot">
+
+      <p>Here is what we know based on the challenge:</p>
+      <ul>
+        <li>Evidence has been stolen, thus the data was exfiltrated out of the Personalyz.io organization. The endpoint will be a public IP.
+          <ul>
+            <li>Class A Public: 1.0.0.0 – 127.0.0.0</li>
+            <li>Class A Private: 10.0.0.0 – 10.255.255.255</li>
+            <li>Class B Public: 128.0.0.0 – 191.225.0.0</li>
+            <li>Class B Private: 172.16.0.0 – 172.31.255.255</li>
+            <li>Class C Public: 192.0.0.0 – 223.255.255.0</li>
+            <li>Class C Private: 192.168.0.0 – 192.168.255.255</li>
+          </ul>
+        </li>
+        <li>Personalyz.io is using private IP addresses for endpoints within the address spaces of:
+          <ul>
+            <li>10.75.34.0/24</li>
+            <li>10.87.182.0/24</li>
+            <li>10.111.185.90</li>
+          </ul>
+        </li>
+        <li>Any IP address outside of the private IP address zone is considered a public IP address endpoint on the internet.</li>
+        <li>Command and Control was used to facilitate the exfiltration.</li>
+        <li>One of the protocols noted above was used to exfiltrate the data.</li>
+      </ul>
+
+      <p>There is a technique adversaries use to exfiltrate data over a C2 channel. In the <a href="https://attack.mitre.org/techniques/T1041/" target="_blank">MITRE ATT&amp;CK Framework</a>, this is a publicly known exfiltration technique where adversaries can use uncommon protocols to send data out of Personalyz.io. When reviewing the list of protocols available in the packet capture, the one that stands out the most is <strong>DNS</strong>.</p>
+      <p>We know DNS is a UDP protocol that is typically on port 53. Let's take a look in the UDP section of the Endpoints module.</p>
+      <a href="assets/D5_06.png"><img src="assets/D5_06.png" alt="Wireshark Endpoints module showing UDP traffic on port 53" class="screenshot"></a>
+      <p class="screenshot-caption">// Click image to enlarge — UDP Endpoints filtered by port number</p>
+
+      <ol>
+        <li>Click on the <strong>UDP</strong> protocol tab. This will filter the endpoints by UDP.</li>
+        <li>Click on the <strong>Port</strong> column to sort the ports by protocol number.</li>
+      </ol>
+
+      <p>We can see a public IP address of <strong>251.91.13.37</strong> in this list. There are 33 packets being transported and received with this IP address.</p>
+      <p>Let's apply this IP address as a filter by right-clicking on the highlighted line item → <strong>Apply as Filter</strong> → <strong>Selected</strong>. Then close the Endpoints module.</p>
+      <a href="assets/D5_07.png"><img src="assets/D5_07.png" alt="Wireshark applying IP address as display filter" class="screenshot"></a>
+      <p class="screenshot-caption">// Click image to enlarge — applying the public C2 IP as a Wireshark display filter</p>
+
+      <p>We can now see Wireshark is filtering traffic with the following filter:</p>
+      <div class="code-block">ip.addr==251.91.13.37 && udp.port==53</div>
+
+      <p>We can see DNS traffic being sent from our private IP address of <strong>10.75.34.13</strong> to the public IP address <strong>251.91.13.37</strong>. We found one part of the flag — the Command-and-Control (C2) IP address.</p>
+      <p>However, we are still missing the name of our compromised machine. This can be resolved by applying the <strong>Name Resolution</strong> filter for network protocols in Wireshark. This allows us to view numerical addresses in a human-readable format.</p>
+      <img src="assets/D5_08.png" alt="Wireshark View menu showing Name Resolution option" class="screenshot">
+      <p>At the top menu bar, select <strong>View</strong> → <strong>Name Resolution</strong> → <strong>Resolve Network Addresses</strong>.</p>
+      <a href="assets/D5_09.png"><img src="assets/D5_09.png" alt="Wireshark resolving network address to hostname bvlik" class="screenshot"></a>
+      <p class="screenshot-caption">// Click image to enlarge — Name Resolution reveals the compromised hostname</p>
+
+      <p>Boom! We resolved the network address and got the name of the endpoint: <strong>bvlik</strong>.</p>
+
+    </div>
+
+    <div class="writeup-section" id="mitre">
+      <h2>MITRE ATT&amp;CK</h2>
+      <p>In this challenge, we inspected Personalyz.io network traffic using Wireshark to identify the compromised service sending DNS queries to an external public IP address belonging to Shadow Gopher.</p>
+      <h3>Tactics</h3>
+      <p>In the MITRE ATT&amp;CK framework, this tactic falls under <a href="https://attack.mitre.org/tactics/TA0011/" target="_blank">Command and Control (TA0011)</a> — a compromised machine on the Personalyz network is communicating to an external endpoint owned by Shadow Gopher.</p>
+      <h3>Techniques</h3>
+      <p>In the MITRE ATT&amp;CK framework, this technique falls under <a href="https://attack.mitre.org/techniques/T1071/004/" target="_blank">Application Layer Protocol: DNS (T1071.004)</a> — the protocol used for communication between the compromised Personalyz machine and a Shadow Gopher server is DNS on port 53.</p>
+      <h3>Procedures</h3>
+      <p>A compromised machine on the Personalyz network sending DNS requests on port 53 to an external endpoint owned by Shadow Gopher, establishing Command and Control (C2) communication to facilitate data exfiltration.</p>
+    </div>
+
+    <div class="writeup-section" id="mitigation">
+      <h2>Mitigation</h2>
+      <p>The following mitigation measures can be applied to this TTP. Click a link to view full details in the MITRE ATT&amp;CK Framework.</p>
+      <table class="writeup-table">
+        <thead>
+          <tr>
+            <td>Mitigation</td>
+            <td>Description</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="https://attack.mitre.org/mitigations/M1037/" target="_blank">M1037 — Filter Network Traffic</a></td>
+            <td>Utilize network appliances and endpoint software to filter ingress, egress, and lateral network traffic. Other mitigations to implement include protocol-based filtering, network segmentation, and application layer filtering to block anomalous DNS traffic to unknown resolvers.</td>
+          </tr>
+          <tr>
+            <td><a href="https://attack.mitre.org/mitigations/M1031/" target="_blank">M1031 — Network Intrusion Prevention</a></td>
+            <td>Use Intrusion Detection System (IDS) signatures to block traffic at network boundaries.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="writeup-section" id="detection">
+      <h2>Detection</h2>
+      <p>The following detection data sources are applicable to this TTP. Click a link to view full details in the MITRE ATT&amp;CK Framework.</p>
+      <table class="writeup-table">
+        <thead>
+          <tr>
+            <td>Data Source</td>
+            <td>Description</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="https://attack.mitre.org/datasources/DS0029/#Network%20Traffic%20Content" target="_blank">DS0029 — Network Traffic Content</a></td>
+            <td>Network Packet Captures (Wireshark, Zeek, Suricata/Snort with PCAP logging), host-based logging, and cloud/SaaS traffic collection to inspect C2 traffic, exfiltration, and suspicious activity within network communications.</td>
+          </tr>
+          <tr>
+            <td><a href="https://attack.mitre.org/datasources/DS0029/#Network%20Traffic%20Flow" target="_blank">DS0029 — Network Traffic Flow</a></td>
+            <td>Network flow logs (NetFlow, sFlow, Zeek/Bro flow logs), host-based logging, and cloud/SaaS flow monitoring for capturing session-level details including source/destination IPs, ports, protocols, timestamps, and data volume to identify anomalous outbound DNS patterns.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <aside class="toc">
+    <div class="toc-title">// TABLE OF CONTENTS</div>
+    <ul>
+      <li><a href="#challenge">1. Challenge</a></li>
+      <li><a href="#solution">2. Solution</a></li>
+      <li><a href="#mitre">3. MITRE ATT&amp;CK</a></li>
+      <li><a href="#mitigation">4. Mitigation</a></li>
+      <li><a href="#detection">5. Detection</a></li>
+    </ul>
+  </aside>
+</div>
+
+<footer>
+  <span class="footer-copy" id="site-copyright"></span>
+  <span class="footer-tag">[ STAY CURIOUS // STAY SHARP // END TRANSMISSION ]</span>
+</footer>
+<script src="../main.js"></script>
+</body>
+</html>

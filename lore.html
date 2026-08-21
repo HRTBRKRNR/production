@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>// LORE :: HRTBRKRNR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #06040F; }
+
+    /* ── Boot sequence ── */
+    .lore-boot {
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      color: var(--green-neon);
+      letter-spacing: .1em;
+      padding: 3rem 2rem 0;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 2;
+    }
+
+    .lore-boot .boot-line { opacity: 0; animation: bootFade .3s ease forwards; }
+    .lore-boot .boot-line:nth-child(1)  { animation-delay: .2s; }
+    .lore-boot .boot-line:nth-child(2)  { animation-delay: .5s; }
+    .lore-boot .boot-line:nth-child(3)  { animation-delay: .8s; }
+    .lore-boot .boot-line:nth-child(4)  { animation-delay: 1.1s; }
+    .lore-boot .boot-line:nth-child(5)  { animation-delay: 1.4s; }
+    .lore-boot .boot-line:nth-child(6)  { animation-delay: 1.7s; }
+    .lore-boot .boot-line:nth-child(7)  { animation-delay: 2.0s; }
+
+    @keyframes bootFade {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Lore hero ── */
+    .lore-hero {
+      text-align: center;
+      padding: 3rem 2rem 2rem;
+      opacity: 0;
+      animation: bootFade .8s 2.4s ease forwards;
+    }
+
+    .lore-callsign {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: .06em;
+      line-height: 1;
+      margin-bottom: .5rem;
+    }
+
+    .lore-callsign span { color: var(--magenta); text-shadow: var(--glow-magenta); }
+
+    .lore-tagline {
+      font-family: var(--font-mono);
+      font-size: .85rem;
+      color: rgba(240,238,248,.5);
+      letter-spacing: .2em;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── Bio block ── */
+    .lore-bio {
+      max-width: 680px;
+      margin: 0 auto 4rem;
+      padding: 0 2rem;
+      opacity: 0;
+      animation: bootFade .8s 2.8s ease forwards;
+    }
+
+    .lore-bio p {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      color: rgba(240,238,248,.7);
+      font-weight: 300;
+      line-height: 1.9;
+      text-align: center;
+    }
+
+    /* ── Polaroids ── */
+    .polaroid-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+      opacity: 0;
+      animation: bootFade .8s 3.2s ease forwards;
+    }
+
+    .polaroid-section-title {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--yellow-neon);
+      text-shadow: var(--glow-yellow);
+      letter-spacing: .2em;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .polaroid-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+
+    .polaroid {
+      background: #f0ede8;
+      padding: 10px 10px 0;
+      width: 180px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .polaroid:nth-child(1) { transform: rotate(-3deg); }
+    .polaroid:nth-child(2) { transform: rotate(2deg); }
+    .polaroid:nth-child(3) { transform: rotate(-1.5deg); }
+    .polaroid:nth-child(4) { transform: rotate(2.5deg); }
+    .polaroid:nth-child(5) { transform: rotate(-2deg); }
+    .polaroid:nth-child(6) { transform: rotate(1deg); }
+    .polaroid:nth-child(7) { transform: rotate(-2.5deg); }
+    .polaroid:nth-child(8) { transform: rotate(1.5deg); }
+
+    .polaroid:hover {
+      transform: rotate(0deg) scale(1.06) !important;
+      box-shadow: 0 16px 48px rgba(0,0,0,.8), 0 0 24px rgba(211,74,232,.3);
+      z-index: 10;
+    }
+
+    .polaroid-img {
+      width: 100%;
+      height: 160px;
+      overflow: hidden;
+      background: #1a1a2e;
+    }
+
+    .polaroid-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .polaroid-caption {
+      font-family: 'Caveat', cursive;
+      font-size: .95rem;
+      color: #2a2028;
+      text-align: center;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 6px;
+      line-height: 1.3;
+    }
+
+    .polaroid { cursor: pointer; }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(6,4,15,.92);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      backdrop-filter: blur(6px);
+    }
+
+    .lightbox.active { display: flex; }
+
+    .lightbox-polaroid {
+      background: #f0ede8;
+      padding: 16px 16px 0;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 24px 80px rgba(0,0,0,.9), 0 0 40px rgba(211,74,232,.25);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      animation: lbPop .25s cubic-bezier(.34,1.56,.64,1) forwards;
+    }
+
+    @keyframes lbPop {
+      from { transform: scale(.85); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .lightbox-polaroid img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .lightbox-caption {
+      font-family: 'Caveat', cursive;
+      font-size: 2.0rem;
+      color: #2a2028;
+      text-align: center;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      line-height: 1.3;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -2.5rem;
+      right: 0;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: rgba(240,238,248,.5);
+      letter-spacing: .15em;
+      cursor: pointer;
+      transition: color .2s;
+    }
+
+    .lightbox-close:hover { color: var(--green-neon); text-shadow: var(--glow-green); }
+
+    @media (max-width: 600px) {
+      .lightbox-polaroid { padding: 12px 12px 70px; }
+      .lightbox-polaroid img { height: 260px; }
+      .lightbox-caption { font-size: 1.1rem; }
+    }
+
+    /* ── Return link ── */
+    .lore-return {
+      text-align: center;
+      padding-bottom: 4rem;
+      opacity: 0;
+      animation: bootFade .8s 3.6s ease forwards;
+    }
+
+    .lore-return a {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--green-neon);
+      text-shadow: var(--glow-green);
+      text-decoration: none;
+      letter-spacing: .15em;
+      border-bottom: 1px solid var(--green-neon);
+      transition: text-shadow .2s;
+    }
+
+    .lore-return a:hover { text-shadow: 0 0 20px var(--green-neon); }
+
+    @media (max-width: 600px) {
+      .polaroid-grid { gap: 2rem; }
+      .polaroid { width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="lore-boot">
+  <div class="boot-line">&gt;_ CLASSIFIED ACCESS GRANTED</div>
+  <div class="boot-line">&gt;_ DECRYPTING ./lore/ . . .</div>
+  <div class="boot-line">&gt;_ VERIFYING IDENTITY . . . <span style="color:var(--green-neon);">[OK]</span></div>
+  <div class="boot-line">&gt;_ LOADING NETRUNNER PROFILE . . .</div>
+  <div class="boot-line">&gt;_ WARNING: CONTENT IS CLASSIFIED. DO NOT REDISTRIBUTE.</div>
+  <div class="boot-line">&gt;_ ─────────────────────────────────────────</div>
+  <div class="boot-line">&gt;_ WELCOME BACK, CHOOM.</div>
+</div>
+
+<div class="lore-hero">
+  <h1 class="lore-callsign">HRTBRK<span>RNR</span></h1>
+  <p class="lore-tagline">// BREAKING HEARTS ACROSS THE NET</p>
+</div>
+
+<div style="max-width: 1000px; margin: 0 auto; padding: 3rem 2rem 1.5rem;">
+  <p class="polaroid-section-title" style="margin-bottom: 1.5rem;">&gt;_ AUG 2026 // RECOVERED FRAGMENTS // HANDLE WITH CARE</p>
+
+  <div class="terminal-block" style="max-width: 560px; margin: 0 auto 1.5rem;">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="terminal-title">polaroid_series2026_01.txt</span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">❯ </span><span class="t-cmd">cat polaroid_series2026_01.txt</span></div>
+      <div>&nbsp;</div>
+      <div><span class="t-comment">// DATE_RANGE: 2026-08-04 / 2026-08-09</span></div>
+      <div><span class="t-val">First time in the neon desert they call Las Vegas.</span></div>
+      <div><span class="t-val">Traveled a long road to get here.</span></div>
+      <div><span class="t-val">Never chased a reputation.</span></div>
+      <div><span class="t-val">Just another blue team ghost,</span></div>
+      <div><span class="t-val">Watching the grid from the shadows.</span></div>
+      <div><span class="t-val">Every runner earns a callsign sooner or later.</span></div>
+      <div><span class="t-val">Mine?</span></div>
+      <div>&nbsp;</div>
+      <div><span class="t-key">LOLBAS.</span></div>
+      <div>&nbsp;</div>
+      <div><span class="t-prompt">❯ </span><span class="t-cursor"></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="polaroid-section" style="padding-top: 0;">
+  <div class="polaroid-grid">
+
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <img src="assets/polaroids/08.2026/2026_08_backinthebadlands.png" alt="back in the badlands">
+      </div>
+      <div class="polaroid-caption">Of all things in the Badlands...it had to be Militech.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <img src="assets/polaroids/08.2026/2026_08_alwaysworking.png" alt="always working">
+      </div>
+      <div class="polaroid-caption">Always up late at night working.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <img src="assets/polaroids/08.2026/2026_08_undercoveratblackhat.png" alt="undercover at black hat">
+      </div>
+      <div class="polaroid-caption">One of the Best Opportunities in my Career!!!</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <img src="assets/polaroids/08.2026/2026_08_justanothertuesday.png" alt="just another tuesday">
+      </div>
+      <div class="polaroid-caption">Just another Tuesday.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <img src="assets/polaroids/08.2026/2026_08_negotiationsgonewrong.png" alt="negotiations gone wrong">
+      </div>
+      <div class="polaroid-caption">Negotiations gone wrong with Maelstrom again!!!</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <img src="assets/polaroids/08.2026/2026_08_tygerclawsdidntknowwhatwascoming.png" alt="tyger claws didn't know what was coming">
+      </div>
+      <div class="polaroid-caption">They had no idea I was watching.</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <img src="assets/polaroids/08.2026/2026_08_toolsofthetrade.png" alt="tools of the trade">
+      </div>
+      <div class="polaroid-caption">It is still considered Hacking!!!</div>
+    </div>
+
+    <div class="polaroid">
+      <div class="polaroid-img">
+        <img src="assets/polaroids/08.2026/2026_08_netrunneratdefcon34.png" alt="netrunner at defcon 34">
+      </div>
+      <div class="polaroid-caption">Dreams Really Do Come True!!!</div>
+    </div>
+
+  </div>
+  <p style="font-family: var(--font-mono); font-size: .72rem; color: rgba(240,238,248,.35); letter-spacing: .18em; text-align: center; margin-top: 2.5rem;">[ NEW SERIES COMING SOON ]</p>
+</div>
+
+<div class="lore-return">
+  <a href="index.html">← RETURN TO BASE</a>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <span class="footer-copy" id="site-copyright"></span>
+  <span class="footer-tag">[ STAY CURIOUS // STAY SHARP // END TRANSMISSION ]</span>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-polaroid" id="lightboxPolaroid">
+    <span class="lightbox-close" id="lightboxClose">[ CLOSE // ESC ]</span>
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+<script>
+  (function() {
+    const lightbox       = document.getElementById('lightbox');
+    const lightboxImg    = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose  = document.getElementById('lightboxClose');
+
+    document.querySelectorAll('.polaroid').forEach(function(p) {
+      p.addEventListener('click', function() {
+        const img     = p.querySelector('img');
+        const caption = p.querySelector('.polaroid-caption');
+        lightboxImg.src         = img.src;
+        lightboxImg.alt         = img.alt;
+        lightboxCaption.textContent = caption.textContent;
+        lightbox.classList.add('active');
+      });
+    });
+
+    function closeLightbox() { lightbox.classList.remove('active'); }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+
+    lightbox.addEventListener('click', function(e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  }());
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>// P3.1 Sub-challenges :: CTF WRITE-UP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .writeup-hero { min-height: 36vh; display: flex; align-items: flex-end; padding: 7rem 2rem 3rem; position: relative; overflow: hidden; background: radial-gradient(ellipse 70% 60% at 15% 60%, rgba(23,13,133,.5) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 90% 20%, rgba(77,250,84,.08) 0%, transparent 60%), linear-gradient(180deg, #06040F 0%, #0E093D 70%, #06040F 100%); }
+    .writeup-hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(95,28,189,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(95,28,189,.1) 1px, transparent 1px); background-size: 48px 48px; animation: gridScroll 20s linear infinite; }
+    .writeup-hero-content { position: relative; z-index: 2; max-width: 1100px; width: 100%; margin: 0 auto; }
+    .back-btn { display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-mono); font-size: .72rem; color: var(--green-neon); text-decoration: none; letter-spacing: .12em; margin-bottom: 1.5rem; transition: text-shadow .2s; }
+    .back-btn:hover { text-shadow: var(--glow-green); }
+    .writeup-title { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 900; color: var(--white); letter-spacing: .03em; margin-bottom: 1rem; line-height: 1.1; }
+    .writeup-title span { color: var(--green-neon); text-shadow: var(--glow-green); }
+    .writeup-meta { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.2rem; align-items: center; }
+    .meta-badge { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; padding: .25rem .75rem; border-radius: 2px; border: 1px solid var(--grey-dim); background: rgba(6,4,15,.6); color: var(--white); }
+    .meta-badge.difficulty-easy { border-color: var(--green-neon); color: var(--green-neon); text-shadow: var(--glow-green); }
+    .meta-badge.category { border-color: var(--purple-vivid); color: var(--magenta); background: rgba(95,28,189,.2); }
+    .meta-badge.points { border-color: var(--green-neon); color: var(--green-neon); }
+    .writeup-tagline { font-family: var(--font-mono); font-size: .85rem; color: rgba(240,238,248,.6); letter-spacing: .08em; font-style: italic; }
+    .writeup-layout { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; display: grid; grid-template-columns: 1fr 260px; gap: 3rem; align-items: start; }
+    .toc { position: sticky; top: 80px; background: rgba(6,4,15,.8); border: 1px solid var(--purple-vivid); border-radius: 4px; padding: 1.25rem; box-shadow: var(--glow-purple); }
+    .toc-title { font-family: var(--font-display); font-size: .72rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .15em; margin-bottom: 1rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim); }
+    .toc ul { list-style: none; } .toc ul li { margin-bottom: .4rem; }
+    .toc ul li a { font-family: var(--font-mono); font-size: .72rem; color: rgba(240,238,248,.55); text-decoration: none; letter-spacing: .06em; transition: color .2s, text-shadow .2s; display: block; padding: .2rem 0 .2rem .6rem; border-left: 2px solid transparent; }
+    .toc ul li a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-left-color: var(--green-neon); }
+    .writeup-section { margin-bottom: 3.5rem; }
+    .writeup-section h2 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--magenta); text-shadow: var(--glow-magenta); letter-spacing: .08em; margin-bottom: 1.25rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim); display: flex; align-items: center; gap: .75rem; }
+    .writeup-section h2::before { content: '//'; color: var(--purple-vivid); font-size: .85rem; }
+    .writeup-section p { font-family: var(--font-body); font-size: 1rem; color: rgba(240,238,248,.75); font-weight: 300; line-height: 1.85; }
+    @media (max-width: 900px) { .writeup-layout { grid-template-columns: 1fr; padding: 2rem 1.25rem 4rem; } .toc { position: static; order: -1; } }
+    @media (max-width: 600px) { .writeup-meta { gap: .4rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">SYS_<span>HRTBRKRNR</span>.exe</a>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">ABOUT</a></li>
+    <li><a href="../index.html#ctf">CTF</a></li>
+    <li><a href="../index.html#articles">ARTICLES</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="../index.html#about"    onclick="closeMenu()">ABOUT</a>
+  <a href="../index.html#ctf"      onclick="closeMenu()">CTF WRITE-UPS</a>
+  <a href="../index.html#articles" onclick="closeMenu()">ARTICLES</a>
+  <a href="../index.html#contact"  onclick="closeMenu()">CONTACT</a>
+</div>
+
+<div class="writeup-hero">
+  <div class="writeup-hero-content">
+    <a href="../target-defense-2025.html" class="back-btn">← BACK TO CTF WRITE-UPS</a>
+    <h1 class="writeup-title">P3.1 <span>Sub-challenges</span></h1>
+    <div class="writeup-meta">
+      <span class="meta-badge difficulty-easy">★☆☆☆☆ EASY</span>
+      <span class="meta-badge points">15 PTS</span>
+      <span class="meta-badge category">TUTORIAL</span>
+      <span class="meta-badge">WiCyS + Target Defense Challenge 2025: BURROWING THE BUSINESS</span>
+    </div>
+    <p class="writeup-tagline">&gt;_ Third challenge in the tutorial — the answer is between quotes.</p>
+  </div>
+</div>
+
+<div class="writeup-layout">
+  <div class="writeup-body">
+
+    <div class="writeup-section" id="challenge">
+      <h2>Challenge</h2>
+      <p>Some challenges are broken up into sub-challenges.</p>
+      <p>They give less points, but in total they will amount to a full challenge's worth.</p>
+      <p>We're running out of fun ideas for intro flags, so this one is uhh, "submarine sandwich".</p>
+    </div>
+
+    <div class="writeup-section" id="solution">
+      <h2>Solution</h2>
+      <p>This is the second time I have seen this challenge before. <em>Fun Fact:</em> It is called a hoagie where I live and the bread is harder. The answer is what is in the quoted text.</p>
+    </div>
+
+  </div>
+
+  <aside class="toc">
+    <div class="toc-title">// TABLE OF CONTENTS</div>
+    <ul>
+      <li><a href="#challenge">1. Challenge</a></li>
+      <li><a href="#solution">2. Solution</a></li>
+    </ul>
+  </aside>
+</div>
+
+<footer>
+  <span class="footer-copy" id="site-copyright"></span>
+  <span class="footer-tag">[ STAY CURIOUS // STAY SHARP // END TRANSMISSION ]</span>
+</footer>
+<script src="../main.js"></script>
+</body>
+</html>

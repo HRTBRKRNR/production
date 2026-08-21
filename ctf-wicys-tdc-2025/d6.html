@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>// D6. Smuggled Away! :: CTF WRITE-UP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .writeup-hero { min-height: 36vh; display: flex; align-items: flex-end; padding: 7rem 2rem 3rem; position: relative; overflow: hidden; background: radial-gradient(ellipse 70% 60% at 15% 60%, rgba(23,13,133,.5) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 90% 20%, rgba(211,74,232,.12) 0%, transparent 60%), linear-gradient(180deg, #06040F 0%, #0E093D 70%, #06040F 100%); }
+    .writeup-hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(95,28,189,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(95,28,189,.1) 1px, transparent 1px); background-size: 48px 48px; animation: gridScroll 20s linear infinite; }
+    .writeup-hero-content { position: relative; z-index: 2; max-width: 1100px; width: 100%; margin: 0 auto; }
+    .back-btn { display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-mono); font-size: .72rem; color: var(--green-neon); text-decoration: none; letter-spacing: .12em; margin-bottom: 1.5rem; transition: text-shadow .2s; }
+    .back-btn:hover { text-shadow: var(--glow-green); }
+    .writeup-title { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 900; color: var(--white); letter-spacing: .03em; margin-bottom: 1rem; line-height: 1.1; }
+    .writeup-title span { color: var(--magenta); text-shadow: var(--glow-magenta); }
+    .writeup-meta { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.2rem; align-items: center; }
+    .meta-badge { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; padding: .25rem .75rem; border-radius: 2px; border: 1px solid var(--grey-dim); background: rgba(6,4,15,.6); color: var(--white); }
+    .meta-badge.difficulty-hard { border-color: var(--magenta); color: var(--magenta); text-shadow: var(--glow-magenta); }
+    .meta-badge.category { border-color: var(--purple-vivid); color: var(--magenta); background: rgba(95,28,189,.2); }
+    .meta-badge.points { border-color: var(--green-neon); color: var(--green-neon); }
+    .writeup-tagline { font-family: var(--font-mono); font-size: .85rem; color: rgba(240,238,248,.6); letter-spacing: .08em; font-style: italic; }
+    .writeup-layout { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; display: grid; grid-template-columns: 1fr 260px; gap: 3rem; align-items: start; }
+    .toc { position: sticky; top: 80px; background: rgba(6,4,15,.8); border: 1px solid var(--purple-vivid); border-radius: 4px; padding: 1.25rem; box-shadow: var(--glow-purple); }
+    .toc-title { font-family: var(--font-display); font-size: .72rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .15em; margin-bottom: 1rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim); }
+    .toc ul { list-style: none; } .toc ul li { margin-bottom: .4rem; }
+    .toc ul li a { font-family: var(--font-mono); font-size: .72rem; color: rgba(240,238,248,.55); text-decoration: none; letter-spacing: .06em; transition: color .2s, text-shadow .2s; display: block; padding: .2rem 0 .2rem .6rem; border-left: 2px solid transparent; }
+    .toc ul li a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-left-color: var(--green-neon); }
+    .toc ul li.toc-sub a { padding-left: 1.4rem; font-size: .68rem; }
+    .writeup-section { margin-bottom: 3.5rem; }
+    .writeup-section h2 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--magenta); text-shadow: var(--glow-magenta); letter-spacing: .08em; margin-bottom: 1.25rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim); display: flex; align-items: center; gap: .75rem; }
+    .writeup-section h2::before { content: '//'; color: var(--purple-vivid); font-size: .85rem; }
+    .writeup-section h3 { font-family: var(--font-display); font-size: .82rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .1em; margin: 1.75rem 0 .75rem; }
+    .writeup-section p, .writeup-section li { font-family: var(--font-body); font-size: 1rem; color: rgba(240,238,248,.75); font-weight: 300; line-height: 1.85; }
+    .writeup-section ul, .writeup-section ol { margin: .75rem 0 .75rem 1.5rem; }
+    .writeup-section li { margin-bottom: .35rem; }
+    .writeup-section ul ul { margin-top: .35rem; }
+    .writeup-section a { color: var(--magenta); text-decoration: none; border-bottom: 1px solid rgba(211,74,232,.35); transition: color .2s, border-color .2s, text-shadow .2s; }
+    .writeup-section a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-bottom-color: var(--green-neon); }
+    .writeup-section b, .writeup-section strong { color: var(--white); font-weight: 600; }
+    .code-block { font-family: var(--font-mono); font-size: .82rem; color: var(--green-neon); background: rgba(6,4,15,.9); border: 1px solid var(--purple-vivid); border-left: 3px solid var(--green-neon); border-radius: 2px; padding: .85rem 1.25rem; margin: 1rem 0; overflow-x: auto; box-shadow: inset 0 0 20px rgba(77,250,84,.03); white-space: pre; }
+    .code-block::before { content: '❯ '; color: var(--magenta); }
+    .image-container { margin: 1.25rem 0; }
+    .image-container img { width: 100%; border: 1px solid var(--purple-vivid); border-radius: 4px; display: block; }
+    .img-caption { font-family: var(--font-mono); font-size: .68rem; color: rgba(240,238,248,.35); letter-spacing: .08em; margin-top: .4rem; text-align: center; }
+    .writeup-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+    .writeup-table thead td { font-family: var(--font-display); font-size: .72rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .1em; padding: .75rem 1rem; background: rgba(95,28,189,.2); border: 1px solid var(--purple-vivid); }
+    .writeup-table tbody tr { border-bottom: 1px solid var(--grey-dim); transition: background .2s; }
+    .writeup-table tbody tr:hover { background: rgba(95,28,189,.08); }
+    .writeup-table tbody td { padding: .85rem 1rem; color: rgba(240,238,248,.7); font-weight: 300; line-height: 1.7; vertical-align: top; border-left: 1px solid var(--grey-dim); border-right: 1px solid var(--grey-dim); }
+    .writeup-table tbody td:first-child { color: var(--magenta); font-weight: 400; white-space: nowrap; width: 200px; }
+    .writeup-table a { color: var(--magenta); }
+    @media (max-width: 900px) { .writeup-layout { grid-template-columns: 1fr; padding: 2rem 1.25rem 4rem; } .toc { position: static; order: -1; } }
+    @media (max-width: 600px) { .writeup-meta { gap: .4rem; } .writeup-table tbody td:first-child { white-space: normal; width: auto; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">SYS_<span>HRTBRKRNR</span>.exe</a>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">ABOUT</a></li>
+    <li><a href="../index.html#ctf">CTF</a></li>
+    <li><a href="../index.html#articles">ARTICLES</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="../index.html#about"    onclick="closeMenu()">ABOUT</a>
+  <a href="../index.html#ctf"      onclick="closeMenu()">CTF WRITE-UPS</a>
+  <a href="../index.html#articles" onclick="closeMenu()">ARTICLES</a>
+  <a href="../index.html#contact"  onclick="closeMenu()">CONTACT</a>
+</div>
+
+<div class="writeup-hero">
+  <div class="writeup-hero-content">
+    <a href="../target-defense-2025.html" class="back-btn">← BACK TO CTF WRITE-UPS</a>
+    <h1 class="writeup-title">D6. <span>Smuggled Away!</span></h1>
+    <div class="writeup-meta">
+      <span class="meta-badge difficulty-hard">★★★★★ HARD</span>
+      <span class="meta-badge points">500 PTS</span>
+      <span class="meta-badge category">NETWORK PROTOCOLS</span>
+      <span class="meta-badge">WiCyS + Target Defense Challenge 2025: BURROWING THE BUSINESS</span>
+    </div>
+    <p class="writeup-tagline">&gt;_ Discover what the adversary exfiltrated in a packet capture.</p>
+  </div>
+</div>
+
+<div class="writeup-layout">
+  <div class="writeup-body">
+
+    <div class="writeup-section" id="challenge">
+      <h2>Challenge</h2>
+      <p>Aye, ye be a smart one! Looks like we found where the stolen data is being smuggled out from... Since it looks like the pirates have already stolen some of our data, can we at least find out what they stole? If it's customer data, we may have an obligation to notify the affected parties...</p>
+      <p>Use your best skills to discover what they took.</p>
+
+      <h3>Objectives</h3>
+      <p>Now that you can see where things are being exfiltrated, can you provide:</p>
+      <ul>
+        <li>the credit card's expiration date and CVV</li>
+        <li>the email</li>
+      </ul>
+      <p>...of the poor soul (aka "gullible client") who we saw in the PCAP?</p>
+
+      <h3>Flag Format</h3>
+      <p>The flag is in the format:</p>
+      <div class="code-block">CreditCardExpiration_CVVofCreditCard_email</div>
+      <p>For example, if the CreditCardExpiration is <b>01/23</b>, CVVofCreditCard is <b>0987</b>, and email is <b>Alice34@bob.com</b>, the flag would be:</p>
+      <div class="code-block">01/23_0987_Alice34@bob.com</div>
+
+      <h3>Required Tools</h3>
+      <ul>
+        <li>PCAP file from the previous challenge (D5)</li>
+        <li>Wireshark or other packet analysis tool</li>
+        <li><a href="https://gchq.github.io/CyberChef/" target="_blank">CyberChef</a> or some coding language to decode the data</li>
+      </ul>
+
+      <h3>Additional Resources</h3>
+      <ul>
+        <li><a href="https://www.wireshark.org/" target="_blank">Wireshark packet analysis tool</a>
+          <ul><li><a href="https://www.wireshark.org/docs/" target="_blank">Documentation and tutorials</a></li></ul>
+        </li>
+        <li><a href="https://tshark.dev/analyze/" target="_blank">tshark usage</a></li>
+        <li><a href="https://gchq.github.io/CyberChef/" target="_blank">CyberChef en-/de-coder, slicer, dicer, multitool</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Category:Binary-to-text_encoding_formats" target="_blank">Encoding formats</a></li>
+      </ul>
+    </div>
+
+    <div class="writeup-section" id="solution">
+      <h2>Solution</h2>
+      <p>In this challenge, we will continue to use the <b>pirates.pcap</b> file from D5 and build off of what we know:</p>
+      <ul>
+        <li>The compromised machine is sending traffic out to IP address <b>251.91.13.37</b></li>
+      </ul>
+      <p>Let's first filter the traffic to focus only on traffic from the compromised machine to the external IP. Type and apply the following into the display filter:</p>
+      <div class="code-block">ip.dst == 251.91.13.37</div>
+
+      <div class="image-container">
+        <a href="assets/D6_02.png"><img src="assets/D6_02.png" alt="Wireshark filtered to 251.91.13.37 destination"></a>
+        <p class="img-caption">Wireshark — traffic filtered to destination 251.91.13.37 &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <p>Observing the <b>Info</b> column of the 33 filtered packets, we can see queries going outbound using different DNS record types to a variety of websites. However, it is odd that all domain names are prefixed with random characters!</p>
+      <p>Per the <a href="https://attack.mitre.org/techniques/T1071/004/" target="_blank">MITRE ATT&amp;CK Framework</a>, this is an Application Layer Protocol technique used to exfiltrate data via C2. Looking at the adversary group <a href="https://attack.mitre.org/groups/G0050/" target="_blank">APT32: Ocean Lotus</a>, one known procedure is: <b>APT32's backdoor can exfiltrate data by encoding it in the subdomain field of DNS packets</b>.</p>
+      <p>This is a huge clue. Let's isolate the prefixes of the domain names.</p>
+      <p>In the top menu select <b>File → Export Selected Packets</b>. Name your new file and save it as a <b>.pcap</b>. Then open a terminal and change to the folder where you saved the packets:</p>
+      <div class="code-block">cd Downloads/D5</div>
+      <p>Confirm the file is present (my file was labeled <b>cut.pcap</b>):</p>
+      <div class="code-block">ls -l</div>
+
+      <div class="image-container">
+        <img src="assets/D6_03.png" alt="ls -l showing cut.pcap">
+        <p class="img-caption">Terminal — confirming cut.pcap is present in the directory</p>
+      </div>
+
+      <p>Confirm the exported traffic using tshark:</p>
+      <div class="code-block">tshark -r cut.pcap</div>
+
+      <div class="image-container">
+        <img src="assets/D6_04.png" alt="tshark reading cut.pcap">
+        <p class="img-caption">tshark — reading the exported packet capture</p>
+      </div>
+
+      <p>Use tshark to pull only the DNS query names and save to a file:</p>
+      <table class="writeup-table">
+        <thead><tr><td>Argument</td><td>Description</td></tr></thead>
+        <tbody>
+          <tr><td>tshark</td><td>Command-line packet analyzer / Wireshark CLI</td></tr>
+          <tr><td>-r cut.pcap</td><td>Read the pcap file</td></tr>
+          <tr><td>-Y "dns.qry.name"</td><td>Apply the filter to display DNS query names</td></tr>
+          <tr><td>-T fields</td><td>Output values of the fields</td></tr>
+          <tr><td>-e dns.qry.name</td><td>Extract and print the DNS query name field from each matching packet</td></tr>
+          <tr><td>&gt; domains.txt</td><td>Redirect / save to output file domains.txt</td></tr>
+        </tbody>
+      </table>
+      <div class="code-block">tshark -r cut.pcap -Y "dns.qry.name" -T fields -e dns.qry.name > domains.txt</div>
+      <div class="code-block">cat domains.txt</div>
+
+      <div class="image-container">
+        <img src="assets/D6_05.png" alt="domains.txt output">
+        <p class="img-caption">domains.txt — DNS query names extracted from the capture</p>
+      </div>
+
+      <p>Now extract only the prefixes using <b>cut</b> and <b>paste</b>:</p>
+      <table class="writeup-table">
+        <thead><tr><td>Argument</td><td>Description</td></tr></thead>
+        <tbody>
+          <tr><td>cut</td><td>Command to extract fields from each line of text</td></tr>
+          <tr><td>-d "."</td><td>Specify the delimiter as a period</td></tr>
+          <tr><td>-f1 domains.txt</td><td>Extract the first field (before the first delimiter) from domains.txt</td></tr>
+          <tr><td>|</td><td>Pipe the output of the first command to the next</td></tr>
+          <tr><td>paste</td><td>Command to join lines of text</td></tr>
+          <tr><td>-sd ''</td><td>Combine all lines into one line and remove whitespace</td></tr>
+          <tr><td>-</td><td>Read from standard input</td></tr>
+          <tr><td>&gt; domains2.txt</td><td>Redirect / save to domains2.txt</td></tr>
+        </tbody>
+      </table>
+      <div class="code-block">cut -d "." -f1 domains.txt | paste -sd '' - > domains2.txt</div>
+      <div class="code-block">cat domains2.txt</div>
+
+      <div class="image-container">
+        <a href="assets/D6_06.png"><img src="assets/D6_06.png" alt="domains2.txt — all prefixes on one line"></a>
+        <p class="img-caption">domains2.txt — all DNS prefixes concatenated on one line &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <p>Now pivot to <a href="https://gchq.github.io/CyberChef/" target="_blank">CyberChef</a>. Open the file or paste the prefix string into the input pane. From the <b>Operations</b> list, drag and drop <b>From Base32</b> into the recipe.</p>
+      <p>Why Base32? Base32 is URL-safe and uses only letters and digits when encoding.</p>
+
+      <div class="image-container">
+        <a href="assets/D6_07.png"><img src="assets/D6_07.png" alt="CyberChef From Base32 operation"></a>
+        <p class="img-caption">CyberChef — From Base32 added to recipe &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <p>The output shows compressed text. Adding <b>Gunzip</b> to decompress reveals an error — the compression type is wrong. The critical missing step is that all the prefix characters are in <b>lowercase</b>. Since ASCII maps lowercase and uppercase characters to different decimal values, we need to convert to uppercase <i>before</i> the Base32 decode. Add <b>To Upper Case</b> to the <em>top</em> of the recipe:</p>
+
+      <div class="image-container">
+        <a href="assets/D6_08.png"><img src="assets/D6_08.png" alt="CyberChef Gunzip error with lowercase input"></a>
+        <p class="img-caption">CyberChef — Gunzip error: lowercase input requires uppercasing first</p>
+      </div>
+
+      <div class="image-container">
+        <a href="assets/D6_09.png"><img src="assets/D6_09.png" alt="CyberChef To Upper Case + From Base32 + Gunzip — plaintext revealed"></a>
+        <p class="img-caption">CyberChef — To Upper Case → From Base32 → Gunzip reveals the exfiltrated PII &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <p>The plaintext exfiltrated data is now visible — use the credit card expiration, CVV, and email address to build the flag.</p>
+    </div>
+
+    <div class="writeup-section" id="mitre">
+      <h2>MITRE ATT&amp;CK</h2>
+      <p>In this challenge, we inspected the compromised DNS traffic between Personalyz.io and Shadow Gopher and discovered data was exfiltrated using prefixed domain requests.</p>
+      <h3>Tactics</h3>
+      <p>This tactic falls under <a href="https://attack.mitre.org/tactics/TA0010/" target="_blank">TA0010 — Exfiltration</a> as data is being egressed from the Personalyz.io organization to Shadow Gopher using prefixed DNS queries containing the data.</p>
+      <h3>Techniques</h3>
+      <p>This technique falls under <a href="https://attack.mitre.org/techniques/T1048/" target="_blank">T1048 — Exfiltration Over Alternative Protocol</a> as the protocol used for exfiltration is DNS port 53.</p>
+      <h3>Procedures</h3>
+      <p>The compromised machine on the Personalyz network sends company PII using prefixed DNS requests on port 53 to an external endpoint owned by Shadow Gopher via Command and Control (C2).</p>
+    </div>
+
+    <div class="writeup-section" id="mitigation">
+      <h2>Mitigation</h2>
+      <p>The following mitigation measures can be applied to this TTP. Click a link to view full details in the MITRE ATT&amp;CK Framework.</p>
+      <table class="writeup-table">
+        <thead><tr><td>Mitigation</td><td>Description</td></tr></thead>
+        <tbody>
+          <tr><td><a href="https://attack.mitre.org/mitigations/M1057/" target="_blank">M1057 — Data Loss Prevention</a></td><td>Implementing strategies and technologies to identify, categorize, monitor and control the movement of sensitive data within an organization including: categorization, exfiltration restrictions, data-in-transit monitoring and endpoint data protection.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/mitigations/M1037/" target="_blank">M1037 — Filter Network Traffic</a></td><td>Employ network appliances and endpoint software to filter ingress, egress and lateral network traffic, including protocol-based filtering, network segmentation, and application layer filtering.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/mitigations/M1031/" target="_blank">M1031 — Network Intrusion Prevention</a></td><td>Use Intrusion Detection System (IDS) signatures to block traffic at network boundaries.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/mitigations/M1030/" target="_blank">M1030 — Network Segmentation</a></td><td>Divide a network into smaller, isolated segments to control and limit the flow of traffic between devices, systems and applications, including implementing a DMZ on public-facing services, restricting traffic with ACLs and firewalls, and monitoring and auditing segmented networks.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/mitigations/M1022/" target="_blank">M1022 — Restrict File and Directory Permissions</a></td><td>Least Privilege Access control on file or directory permissions, file integrity monitoring, and auditing file system access.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/mitigations/M1018/" target="_blank">M1018 — User Account Management</a></td><td>Implement and enforce policies for the lifecycle of user accounts including enforcing the Principle of Least-Privilege, implementing MFA, strong password policies and account lockout policies, and properly deactivating dormant accounts when not in use.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="writeup-section" id="detection">
+      <h2>Detection</h2>
+      <p>The following detection data sources are applicable to this TTP. Click a link to view full details in the MITRE ATT&amp;CK Framework.</p>
+      <table class="writeup-table">
+        <thead><tr><td>Data Source</td><td>Description</td></tr></thead>
+        <tbody>
+          <tr><td><a href="https://attack.mitre.org/datasources/DS0015/" target="_blank">DS0015 — Application Logs</a></td><td>Email Application Logs contain metadata about emails sent, received, or blocked. These logs can be evaluated using a SIEM tool.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/datasources/DS0010/#Cloud%20Storage%20Access" target="_blank">DS0010 — Cloud Storage Access</a></td><td>Monitor for unusual queries to the cloud provider's storage service to detect suspicious cloud storage exfiltration.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/datasources/DS0017/#Command%20Execution" target="_blank">DS0017 — Command Execution</a></td><td>Monitor executed commands and arguments that may steal data by exfiltrating it over a different protocol.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/datasources/DS0022/#File%20Access" target="_blank">DS0022 — File Access</a></td><td>Monitor for suspicious files accessed in isolation that may indicate data being staged for exfiltration.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/datasources/DS0029/#Network%20Connection%20Creation" target="_blank">DS0029 — Network Connection Creation</a></td><td>Monitor for outbound connections using non-standard ports for FTP, DNS, SMTP or SMB.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/datasources/DS0029/#Network%20Traffic%20Content" target="_blank">DS0029 — Network Traffic Content</a></td><td>Network Packet Captures (Wireshark, Zeek, Suricata/Snort with PCAP logging), Host-Based logging and Cloud/SaaS traffic collection to inspect C2 traffic, exfiltration and suspicious activity within network communications.</td></tr>
+          <tr><td><a href="https://attack.mitre.org/datasources/DS0029/#Network%20Traffic%20Flow" target="_blank">DS0029 — Network Traffic Flow</a></td><td>Network Flow Logs (NetFlow, sFlow, Zeek/Bro flow logs), Host-Based logging and Cloud/SaaS flow monitoring for capturing session-level details including source/destination IPs, ports, protocols, timestamps and data volume.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <aside class="toc">
+    <div class="toc-title">// TABLE OF CONTENTS</div>
+    <ul>
+      <li><a href="#challenge">1. Challenge</a></li>
+      <li class="toc-sub"><a href="#challenge">Objectives</a></li>
+      <li class="toc-sub"><a href="#challenge">Flag Format</a></li>
+      <li class="toc-sub"><a href="#challenge">Required Tools</a></li>
+      <li><a href="#solution">2. Solution</a></li>
+      <li><a href="#mitre">3. MITRE ATT&amp;CK</a></li>
+      <li class="toc-sub"><a href="#mitre">Tactics</a></li>
+      <li class="toc-sub"><a href="#mitre">Techniques</a></li>
+      <li class="toc-sub"><a href="#mitre">Procedures</a></li>
+      <li><a href="#mitigation">4. Mitigation</a></li>
+      <li><a href="#detection">5. Detection</a></li>
+    </ul>
+  </aside>
+</div>
+
+<footer>
+  <span class="footer-copy" id="site-copyright"></span>
+  <span class="footer-tag">[ STAY CURIOUS // STAY SHARP // END TRANSMISSION ]</span>
+</footer>
+<script src="../main.js"></script>
+</body>
+</html>
