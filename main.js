@@ -240,12 +240,24 @@ observeElements('.animate-in');
     print('&nbsp;');
   }
 
-  input.addEventListener('keydown', function(e) {
-    if (e.key !== 'Enter') return;
+  function submitCtf() {
     const val = input.value;
     input.value = '';
     handleCommand(val);
-  });
+  }
+
+  const ctfForm = document.getElementById('ctfForm');
+  if (ctfForm) {
+    ctfForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitCtf();
+    });
+  } else {
+    input.addEventListener('keydown', function(e) {
+      if (e.key !== 'Enter') return;
+      submitCtf();
+    });
+  }
 }());
 
 
@@ -268,9 +280,7 @@ observeElements('.animate-in');
 
   let denyCount = 0;
 
-  input.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter') return;
-
+  function submitLore() {
     const cmd = input.value.trim().toLowerCase().replace(/\s+/g, '');
     input.value = '';
     output.innerHTML = '';
@@ -287,5 +297,18 @@ observeElements('.animate-in');
       denyCount++;
       output.innerHTML = '<div><span class="t-deny">' + line + '</span></div>';
     }
-  });
+  }
+
+  const loreForm = document.getElementById('loreForm');
+  if (loreForm) {
+    loreForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitLore();
+    });
+  } else {
+    input.addEventListener('keydown', function(e) {
+      if (e.key !== 'Enter') return;
+      submitLore();
+    });
+  }
 }());

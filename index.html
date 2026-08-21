@@ -201,10 +201,12 @@
           <div><span style="color: var(--magenta); text-shadow: var(--glow-magenta);">// ACTION REQUIRED: type passphrase to unlock access</span></div>
           <div><span class="t-comment">// HINT: initiate the protocol, netrunner.</span></div>
           <div>&nbsp;</div>
-          <div class="terminal-input-row">
-            <span class="t-prompt">❯&nbsp;</span>
-            <input type="text" id="loreInput" class="terminal-input" placeholder="type here..." autocomplete="off" spellcheck="false" style="caret-color: var(--green-neon);" enterkeyhint="go">
-          </div>
+          <form id="loreForm" onsubmit="return false;" style="display:contents;">
+            <div class="terminal-input-row">
+              <span class="t-prompt">❯&nbsp;</span>
+              <input type="text" id="loreInput" class="terminal-input" placeholder="type here..." autocomplete="off" spellcheck="false" style="caret-color: var(--green-neon);" enterkeyhint="go">
+            </div>
+          </form>
           <div id="loreOutput" class="terminal-output"></div>
           <div style="padding-bottom: 2rem;"></div>
         </div>
@@ -237,10 +239,12 @@
           <div><span style="color: var(--magenta); text-shadow: var(--glow-magenta);">// CTF WRITE-UP NAVIGATOR — TYPE 'help' TO BEGIN</span></div>
           <div>&nbsp;</div>
         </div>
+        <form id="ctfForm" onsubmit="return false;" style="display:contents;">
         <div class="terminal-input-row" style="padding: .5rem 1rem .85rem;">
           <span class="t-prompt">❯&nbsp;</span>
           <input type="text" id="ctfInput" class="terminal-input" placeholder="type here..." autocomplete="off" spellcheck="false" style="caret-color: var(--green-neon);" enterkeyhint="go">
         </div>
+        </form>
       </div>
 
 
