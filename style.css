@@ -909,6 +909,23 @@ section {
   gap: 1.5rem;
 }
 
+/* Interactive terminal badge */
+.interactive-badge {
+  display: inline-block;
+  margin-left: .6rem;
+  font-family: var(--font-mono);
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .15em;
+  color: var(--yellow-neon);
+  text-shadow: var(--glow-yellow);
+  border: 1px solid var(--yellow-neon);
+  border-radius: 2px;
+  padding: .2rem .6rem;
+  background: rgba(213,250,77,.06);
+  box-shadow: 0 0 8px rgba(213,250,77,.2);
+}
+
 /* CTF Navigator Terminal */
 .ctf-terminal {
   background: rgba(6,4,15,.9);
@@ -1208,6 +1225,14 @@ footer {
 /* ════════════════════════════════════════
    16. RESPONSIVE
    ════════════════════════════════════════ */
+
+/* Desktop only — reserve space for avatar so text never overlaps */
+@media (min-width: 769px) {
+  .hero-content {
+    padding-right: calc(clamp(225px, 35vw, 450px) + 8vw);
+  }
+}
+
 @media (max-width: 768px) {
   nav { padding: .75rem 1rem; }
   .nav-links   { display: none; }
@@ -1215,6 +1240,14 @@ footer {
 
   #hero        { padding: 5rem 1.25rem 3rem; }
   .hero-avatar { display: none; }
+  #hero        {
+    background-image:
+      linear-gradient(to bottom, rgba(6,4,15,.75) 0%, rgba(6,4,15,.6) 40%, rgba(6,4,15,.85) 100%),
+      url('assets/HRTBRKRNR.png');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
   .hero-stats  { gap: 1rem; }
 
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
