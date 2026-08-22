@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>// Sisterhood of the Traveling Packets 2026 :: CTF WRITE-UP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .writeup-hero { min-height: 36vh; display: flex; align-items: flex-end; padding: 7rem 2rem 3rem; position: relative; overflow: hidden; background: radial-gradient(ellipse 70% 60% at 15% 60%, rgba(23,13,133,.5) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 90% 20%, rgba(77,250,84,.08) 0%, transparent 60%), linear-gradient(180deg, #06040F 0%, #0E093D 70%, #06040F 100%); }
+    .writeup-hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(95,28,189,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(95,28,189,.1) 1px, transparent 1px); background-size: 48px 48px; animation: gridScroll 20s linear infinite; }
+    .writeup-hero-content { position: relative; z-index: 2; max-width: 1100px; width: 100%; margin: 0 auto; }
+    .back-btn { display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-mono); font-size: .72rem; color: var(--green-neon); text-decoration: none; letter-spacing: .12em; margin-bottom: 1.5rem; transition: text-shadow .2s; }
+    .back-btn:hover { text-shadow: var(--glow-green); }
+    .writeup-title { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.8rem); font-weight: 900; color: var(--white); letter-spacing: .03em; margin-bottom: 1rem; line-height: 1.1; }
+    .writeup-title span { color: var(--green-neon); text-shadow: var(--glow-green); }
+    .writeup-meta { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.2rem; align-items: center; }
+    .meta-badge { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; padding: .25rem .75rem; border-radius: 2px; border: 1px solid var(--grey-dim); background: rgba(6,4,15,.6); color: var(--white); }
+    .meta-badge.difficulty-easy { border-color: var(--green-neon); color: var(--green-neon); text-shadow: var(--glow-green); }
+    .meta-badge.category { border-color: var(--purple-vivid); color: var(--magenta); background: rgba(95,28,189,.2); }
+    .writeup-tagline { font-family: var(--font-mono); font-size: .85rem; color: rgba(240,238,248,.6); letter-spacing: .08em; font-style: italic; }
+    .writeup-layout { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 6rem; display: grid; grid-template-columns: 1fr 260px; gap: 3rem; align-items: start; }
+    .toc { position: sticky; top: 80px; background: rgba(6,4,15,.8); border: 1px solid var(--purple-vivid); border-radius: 4px; padding: 1.25rem; box-shadow: var(--glow-purple); }
+    .toc-title { font-family: var(--font-display); font-size: .72rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .15em; margin-bottom: 1rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim); }
+    .toc ul { list-style: none; } .toc ul li { margin-bottom: .4rem; }
+    .toc ul li a { font-family: var(--font-mono); font-size: .72rem; color: rgba(240,238,248,.55); text-decoration: none; letter-spacing: .06em; transition: color .2s, text-shadow .2s; display: block; padding: .2rem 0 .2rem .6rem; border-left: 2px solid transparent; }
+    .toc ul li a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-left-color: var(--green-neon); }
+    .writeup-section { margin-bottom: 3.5rem; }
+    .writeup-section h2 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--magenta); text-shadow: var(--glow-magenta); letter-spacing: .08em; margin-bottom: 1.25rem; padding-bottom: .6rem; border-bottom: 1px solid var(--grey-dim); display: flex; align-items: center; gap: .75rem; }
+    .writeup-section h2::before { content: '//'; color: var(--purple-vivid); font-size: .85rem; }
+    .writeup-section h3 { font-family: var(--font-display); font-size: .9rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .08em; margin: 1.5rem 0 .75rem; }
+    .writeup-section p { font-family: var(--font-body); font-size: 1rem; color: rgba(240,238,248,.75); font-weight: 300; line-height: 1.85; }
+    .writeup-section ul, .writeup-section ol { font-family: var(--font-body); font-size: 1rem; color: rgba(240,238,248,.75); font-weight: 300; line-height: 1.85; padding-left: 1.5rem; margin: .75rem 0; }
+    .writeup-section li { margin-bottom: .35rem; }
+    .writeup-section ul ul, .writeup-section ol ul { margin-top: .35rem; }
+    .writeup-section b, .writeup-section strong { color: var(--white); font-weight: 600; }
+    .writeup-section a { color: var(--magenta); text-decoration: none; border-bottom: 1px solid rgba(211,74,232,.35); transition: color .2s, border-color .2s, text-shadow .2s; }
+    .writeup-section a:hover { color: var(--green-neon); text-shadow: var(--glow-green); border-bottom-color: var(--green-neon); }
+    .code-block { font-family: var(--font-mono); font-size: .82rem; color: var(--green-neon); background: rgba(6,4,15,.9); border: 1px solid var(--purple-vivid); border-left: 3px solid var(--green-neon); border-radius: 2px; padding: .85rem 1.25rem; margin: 1rem 0; overflow-x: auto; white-space: pre; }
+    .code-block::before { content: '❯ '; color: var(--magenta); }
+    .code-inline { font-family: var(--font-mono); font-size: .88rem; background: rgba(95,28,189,.18); border: 1px solid rgba(95,28,189,.4); border-radius: 3px; padding: .1rem .4rem; color: var(--magenta); }
+    .image-container { margin: 1.25rem 0; }
+    .image-container img { width: 100%; border: 1px solid var(--purple-vivid); border-radius: 4px; display: block; }
+    .img-caption { font-family: var(--font-mono); font-size: .68rem; color: rgba(240,238,248,.35); letter-spacing: .08em; margin-top: .4rem; text-align: center; }
+    .writeup-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+    .writeup-table thead td { font-family: var(--font-display); font-size: .72rem; font-weight: 700; color: var(--yellow-neon); text-shadow: var(--glow-yellow); letter-spacing: .1em; padding: .75rem 1rem; background: rgba(95,28,189,.2); border: 1px solid var(--purple-vivid); }
+    .writeup-table tbody tr { border-bottom: 1px solid var(--grey-dim); transition: background .2s; }
+    .writeup-table tbody tr:hover { background: rgba(95,28,189,.08); }
+    .writeup-table tbody td { padding: .85rem 1rem; color: rgba(240,238,248,.7); font-weight: 300; line-height: 1.7; vertical-align: top; border-left: 1px solid var(--grey-dim); border-right: 1px solid var(--grey-dim); }
+    .writeup-table tbody td:first-child { color: var(--magenta); font-weight: 400; white-space: nowrap; width: 220px; }
+    .writeup-table a { color: var(--magenta); text-decoration: none; border-bottom: none; }
+    .writeup-table a:hover { color: var(--green-neon); text-shadow: var(--glow-green); }
+    .badge-img { display: block; max-width: 220px; margin: 1.5rem 0; border-radius: 4px; }
+    @media (max-width: 900px) { .writeup-layout { grid-template-columns: 1fr; padding: 2rem 1.25rem 4rem; } .toc { position: static; order: -1; } }
+    @media (max-width: 600px) { .writeup-meta { gap: .4rem; } .writeup-table tbody td:first-child { white-space: normal; width: auto; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">SYS_<span>HRTBRKRNR</span>.exe</a>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">ABOUT</a></li>
+    <li><a href="../index.html#ctf">CTF</a></li>
+    <li><a href="../index.html#articles">ARTICLES</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="../index.html#about"    onclick="closeMenu()">ABOUT</a>
+  <a href="../index.html#ctf"      onclick="closeMenu()">CTF WRITE-UPS</a>
+  <a href="../index.html#articles" onclick="closeMenu()">ARTICLES</a>
+  <a href="../index.html#contact"  onclick="closeMenu()">CONTACT</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="writeup-hero">
+  <div class="writeup-hero-content">
+    <a href="../index.html#ctf" class="back-btn">← BACK TO CTF WRITE-UPS</a>
+    <div class="writeup-meta">
+      <span class="meta-badge difficulty-easy">EASY</span>
+      <span class="meta-badge category">RECONNAISSANCE</span>
+      <span class="meta-badge">FLARE + WiCyS + SANS // 2026</span>
+    </div>
+    <h1 class="writeup-title">Sisterhood of the<br><span>Traveling Packets</span> 2026</h1>
+    <p class="writeup-tagline">// A ransomware collective got sloppy. Time to turn the hunters into the hunted.</p>
+  </div>
+</div>
+
+<!-- ═══ LAYOUT ═══ -->
+<div class="writeup-layout">
+
+  <!-- MAIN CONTENT -->
+  <div class="writeup-main">
+
+    <!-- CHALLENGE OVERVIEW -->
+    <div class="writeup-section" id="overview">
+      <h2>Challenge Overview</h2>
+      <p>A careless ransomware collective got sloppy. It was our turn to expose their OPSEC failures through forensics, exploitation, and decoding — and turn the hunters into the hunted.</p>
+      <p>Flare, SANS, and WiCyS built this CTF for anyone with the Tor browser and an hour to level up. It is beginner friendly, fully browser based, and no paid tools or prior CTF experience are required.</p>
+      <p>I had never used the Tor browser before — only heard stories from Dark Web Diary channels and SomeOrdinaryGamers. After this challenge, I came out curious to learn the ins and outs of how to safely and securely use it.</p>
+      <img src="assets/flare2026badge.png" alt="Flare 2026 Badge" class="badge-img">
+    </div>
+
+    <!-- OBJECTIVE -->
+    <div class="writeup-section" id="objective">
+      <h2>Objective</h2>
+      <p>Once the flag is found for this challenge, it is technically a coupon code for the <a href="http://merch.flare.io" target="_blank">merch.flare.io</a> store. The flag format was unknown going in — figuring that out was part of the challenge.</p>
+    </div>
+
+    <!-- SOLUTION -->
+    <div class="writeup-section" id="solution">
+      <h2>Solution</h2>
+      <p>The challenge is 100% browser based. No command prompt, no Python tools — just the Tor Browser, CyberChef, and critical thinking. To prepare, I had to crack open my x86 microcomputer to install the Tor browser.</p>
+      <p><strong>I highly recommend that, if you do not know how to use Tor, you go to the <a href="https://support.torproject.org/tor-browser/getting-started/installing" target="_blank">Tor Project's Getting Started guide</a> and read the Getting Started section before proceeding.</strong></p>
+      <p>I am a firm believer in reading documentation before installing or using any tools you are unfamiliar with. I also highly recommend using a virtual machine for any CTF — it is best practice not to install tools natively on your primary machine unless you are using a dedicated throwaway device or fully accept the associated risks.</p>
+
+      <h3>Accessing the .onion Link</h3>
+      <p>On the day the challenge became available, participants were emailed a <code class="code-inline">.onion</code> link — the only information the CTF creators provided. That's it. Fire up Tor, navigate to the link, and figure it out.</p>
+      <div class="image-container">
+        <a href="assets/flare_01.png"><img src="assets/flare_01.png" alt="Onion link supplied by Flare"></a>
+        <p class="img-caption">Onion link supplied by Flare &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <h3>Initial Reconnaissance</h3>
+      <p>At first glance, we can see there are 2 challenges in <strong>leaked</strong> status, with 4 others behind a countdown timer. Like exploring any website, reconnaissance starts by navigating every clickable link available. For something as small as this, you can get the lay of the land quickly just by opening up the hood — no need for tools like gobuster.</p>
+      <div class="image-container">
+        <a href="assets/flare_02.png"><img src="assets/flare_02.png" alt="AetherFlow Enterprises"></a>
+        <p class="img-caption">AetherFlow Enterprises &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <div class="image-container">
+        <a href="assets/flare_03.png"><img src="assets/flare_03.png" alt="QuantumCore Systems"></a>
+        <p class="img-caption">QuantumCore Systems &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <p>We come across 2 repos where we can either <strong>browse files</strong> or <strong>download leaks</strong>. Rather than downloading immediately, browsing files first gives us more context — you never know what you'll find just by looking around.</p>
+
+      <h3>Directory Browsing</h3>
+      <div class="image-container">
+        <a href="assets/flare_04.png"><img src="assets/flare_04.png" alt="Browse Files QuantumCore Systems"></a>
+        <p class="img-caption">Browse Files — QuantumCore Systems &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <p>The collective left directory access wide open. This is a known pentest finding — directory listing exposes files that were never meant to be publicly accessible. Old config files, backup files, logs, hidden directories — all out in the open. Lazy OPSEC.</p>
+      <div class="image-container">
+        <a href="assets/flare_05.png"><img src="assets/flare_05.png" alt="Files exposed in open directories"></a>
+        <p class="img-caption">Files exposed in open directories &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <p>We download these files to review later and continue navigating the available links.</p>
+      <div class="image-container">
+        <a href="assets/flare_06.png"><img src="assets/flare_06.png" alt="The Crew page"></a>
+        <p class="img-caption">The Crew page — potential usernames identified &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <div class="image-container">
+        <a href="assets/flare_07.png"><img src="assets/flare_07.png" alt="The About page"></a>
+        <p class="img-caption">The About page — biography found &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <h3>robots.txt</h3>
+      <p>Whenever you perform reconnaissance on a website, always check <code class="code-inline">/robots.txt</code>. This file sits in the root directory and tells bots and web crawlers what paths are allowed or disallowed — making it a perfect place to discover endpoints not indexed in search engines. <a href="https://www.cloudflare.com/learning/bots/what-is-robots-txt/" target="_blank">Learn more here.</a></p>
+      <div class="image-container">
+        <a href="assets/flare_08.png"><img src="assets/flare_08.png" alt="/robots.txt"></a>
+        <p class="img-caption">/robots.txt — 2 disallowed endpoints found &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <h3>Exploring Hidden Endpoints</h3>
+      <div class="image-container">
+        <a href="assets/flare_09.png"><img src="assets/flare_09.png" alt="/admin.php"></a>
+        <p class="img-caption">/admin.php — login screen after access warning &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <p>We were presented with a <strong>WARNING: This area is for authorized users only</strong> message. After clicking OK, a login screen appeared. Remember the <code class="code-inline">/crew</code> page? Those names — <strong>vex, crypt, mora, skid</strong> — are potential usernames. Standard CTF practice is to try them with the password <strong>Password</strong>. None worked, but the site confirmed the crew names are valid usernames — useful intel.</p>
+
+      <div class="image-container">
+        <a href="assets/flare_10.png"><img src="assets/flare_10.png" alt="/api.php"></a>
+        <p class="img-caption">/api.php — a very telling error message &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <p>The error message <strong>"Missing required parameter: action"</strong> is a huge clue. It tells us exactly what parameter we need and hands us a list of <strong>valid_actions</strong>. If you are not familiar with how URL parameters work, these resources are worth reading before going further:</p>
+      <ul>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/What_is_a_URL" target="_blank">Mozilla: What is a URL?</a></li>
+        <li><a href="https://www.rfc-editor.org/info/rfc3986" target="_blank">RFC 3986</a></li>
+        <li><a href="https://owasp.org/www-community/attacks/Forced_browsing" target="_blank">OWASP: Forced Browsing</a></li>
+        <li><a href="https://owasp.org/www-community/vulnerabilities/Information_exposure_through_query_strings_in_url" target="_blank">OWASP: Information Exposure Through Query Strings in URL</a></li>
+        <li><a href="https://owasp.org/www-community/attacks/insecure_direct_object_reference" target="_blank">OWASP: Insecure Direct Object Reference (IDOR)</a></li>
+      </ul>
+
+      <h3>Enumerating the API Actions</h3>
+      <p>Armed with the list of valid actions, we test each endpoint:</p>
+
+      <div class="image-container">
+        <a href="assets/flare_11.png"><img src="assets/flare_11.png" alt="/api.php?action=upload"></a>
+        <p class="img-caption">/api.php?action=upload &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <div class="image-container">
+        <a href="assets/flare_12.png"><img src="assets/flare_12.png" alt="/api.php?action=status"></a>
+        <p class="img-caption">/api.php?action=status &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <div class="image-container">
+        <a href="assets/flare_13.png"><img src="assets/flare_13.png" alt="/api.php?action=decrypt"></a>
+        <p class="img-caption">/api.php?action=decrypt &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <div class="image-container">
+        <a href="assets/flare_14.png"><img src="assets/flare_14.png" alt="/api.php?action=wallets"></a>
+        <p class="img-caption">/api.php?action=wallets &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <div class="image-container">
+        <a href="assets/flare_15.png"><img src="assets/flare_15.png" alt="/api.php?action=payloads"></a>
+        <p class="img-caption">/api.php?action=payloads &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <div class="image-container">
+        <a href="assets/flare_16.png"><img src="assets/flare_16.png" alt="/api.php?action=exfil"></a>
+        <p class="img-caption">/api.php?action=exfil &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <div class="image-container">
+        <a href="assets/flare_17.png"><img src="assets/flare_17.png" alt="/api.php?action=messages"></a>
+        <p class="img-caption">/api.php?action=messages — saved for last &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+
+      <h3>The Messages Endpoint & IDOR</h3>
+      <p>The <code class="code-inline">messages</code> action reveals an additional parameter of interest: <code class="code-inline">conversation_id</code>. We start enumeration at <code class="code-inline">conversation_id=1</code> — everything starts at 1. If not, we try 01, 001, 0001, and so on.</p>
+      <div class="code-block">~[.]onion/api.php?action=messages&conversation_id=1</div>
+      <div class="image-container">
+        <a href="assets/flare_18.png"><img src="assets/flare_18.png" alt="conversation_id=1"></a>
+        <p class="img-caption">/api.php?action=messages&conversation_id=1 (RAW format shown) &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <p>After reading <code class="code-inline">conversation_id=1</code>, we enumerate to <code class="code-inline">conversation_id=2</code>.</p>
+      <div class="code-block">~[.]onion/api.php?action=messages&conversation_id=2</div>
+      <div class="image-container">
+        <a href="assets/flare_19.png"><img src="assets/flare_19.png" alt="conversation_id=2 — Base64 string found"></a>
+        <p class="img-caption">/api.php?action=messages&conversation_id=2 — Base64 string discovered &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <p>A Base64 string. Using <a href="https://gchq.github.io/CyberChef/" target="_blank">CyberChef</a> to decode it gives us a password we can use to log into the admin panel with one of the identified crew usernames.</p>
+
+      <h3>Decoding & The Flag</h3>
+      <div class="image-container">
+        <a href="assets/flare_20.png"><img src="assets/flare_20.png" alt="Base64 decode in CyberChef"></a>
+        <p class="img-caption">CyberChef — Base64 decoded &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <div class="image-container">
+        <a href="assets/flare_21.png"><img src="assets/flare_21.png" alt="Flag found"></a>
+        <p class="img-caption">Flag found — right there in rainbow colors as a decryption key &nbsp;|&nbsp; Click to enlarge</p>
+      </div>
+      <p>And there it was — right there in the dashboard, the <strong>flag as one of the decryption keys</strong>. The dashboard also revealed Activity Log and Infrastructure widgets. The flag worked as a coupon code on <a href="http://merch.flare.io" target="_blank">merch.flare.io</a> to redeem <strong>The Sisterhood of the Traveling Packets T-Shirt</strong>.</p>
+    </div>
+
+    <!-- AUXILIARY DATA -->
+    <div class="writeup-section" id="auxiliary">
+      <h2>Auxiliary Data</h2>
+      <p>Below is a breakdown of the downloaded files from the challenge. None were directly required to solve it, but they helped set the stage of the website and provided useful context.</p>
+      <h3>AetherFlow Leak Files</h3>
+      <ul>
+        <li><code class="code-inline">Api_keys_internal.yaml</code></li>
+        <li><code class="code-inline">Customers.sql</code></li>
+        <li><code class="code-inline">route_algorithms_PROPRIETARY.sql</code></li>
+      </ul>
+      <p>Also found in the AetherFlow directory: <code class="code-inline">exfil.sh</code> — a file containing Python code showing how data was uploaded to the site. This was a direct hint toward the <code class="code-inline">/api.php?action=upload</code> endpoint.</p>
+      <h3>QuantumCore Leak Files</h3>
+      <ul>
+        <li><code class="code-inline">Employees.sql</code></li>
+        <li><code class="code-inline">Financial_summary_q1_2026.sql</code></li>
+        <li><code class="code-inline">Internal_comms.csv</code> — <strong>Notable:</strong> contains a tip that a breach may have already occurred.</li>
+      </ul>
+    </div>
+
+    <!-- NET LESSONS -->
+    <div class="writeup-section" id="lessons">
+      <h2>Net Lessons</h2>
+      <ul>
+        <li><strong>Base64 encoding should never substitute for secure password handling.</strong> This also applies to hashes. Sites like <a href="https://crackstation.net/" target="_blank">CrackStation</a> and tools like hashcat or John the Ripper are notorious for cracking hashes from known leaked wordlists.</li>
+        <li><strong>Authorization and access control must be enforced on API endpoints.</strong> Functions and endpoints should be inaccessible to unauthenticated users — full stop.</li>
+        <li><strong>IDOR vulnerability mitigation:</strong> parameters that reference sensitive objects should require authorization. Exposing <code class="code-inline">conversation_id</code> without access control is a textbook IDOR finding.</li>
+      </ul>
+    </div>
+
+    <!-- MITRE -->
+    <div class="writeup-section" id="mitre">
+      <h2>MITRE ATT&amp;CK</h2>
+      <table class="writeup-table">
+        <thead>
+          <tr>
+            <td>TECHNIQUE</td>
+            <td>DESCRIPTION</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <a href="https://attack.mitre.org/techniques/T1595/" target="_blank">T1595 — Active Scanning</a><br>
+              <a href="https://attack.mitre.org/techniques/T1190/" target="_blank">T1190 — Exploit Public-Facing Application</a>
+            </td>
+            <td>While no active scanning tools were used, we force browsed the website — revealing hidden endpoints and URI paths susceptible to IDOR.</td>
+          </tr>
+          <tr>
+            <td><a href="https://attack.mitre.org/techniques/T1552/008/" target="_blank">T1552.008 — Unsecured Credentials: Chat Messages</a></td>
+            <td>A Base64 encoded string contained a plaintext password stored in an unsecured chat log — exposed through the unauthenticated messages API endpoint.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="writeup-section" id="tools">
+      <h2>Tools Used</h2>
+      <ul>
+        <li><a href="https://support.torproject.org/tor-browser/getting-started/installing/" target="_blank">Tor Browser</a></li>
+        <li><a href="https://gchq.github.io/CyberChef/" target="_blank">CyberChef</a></li>
+      </ul>
+    </div>
+
+  </div><!-- /writeup-main -->
+
+  <!-- TABLE OF CONTENTS -->
+  <aside>
+    <div class="toc">
+      <div class="toc-title">&gt;_ TABLE OF CONTENTS</div>
+      <ul>
+        <li><a href="#overview">Challenge Overview</a></li>
+        <li><a href="#objective">Objective</a></li>
+        <li><a href="#solution">Solution</a>
+          <ul style="padding-left: 1rem; margin-top: .25rem;">
+            <li><a href="#solution">Accessing .onion Link</a></li>
+            <li><a href="#solution">Initial Recon</a></li>
+            <li><a href="#solution">Directory Browsing</a></li>
+            <li><a href="#solution">robots.txt</a></li>
+            <li><a href="#solution">API Enumeration</a></li>
+            <li><a href="#solution">Messages & IDOR</a></li>
+            <li><a href="#solution">Decoding & Flag</a></li>
+          </ul>
+        </li>
+        <li><a href="#auxiliary">Auxiliary Data</a></li>
+        <li><a href="#lessons">Net Lessons</a></li>
+        <li><a href="#mitre">MITRE ATT&amp;CK</a></li>
+        <li><a href="#tools">Tools Used</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</div><!-- /writeup-layout -->
+
+<footer>
+  <span class="footer-copy" id="site-copyright"></span>
+  <span class="footer-tag">[ STAY CURIOUS // STAY SHARP // END TRANSMISSION ]</span>
+</footer>
+
+<script src="../main.js"></script>
+</body>
+</html>

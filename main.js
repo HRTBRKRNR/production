@@ -151,7 +151,7 @@ observeElements('.animate-in');
     {
       slug:  'sisterhood',
       label: 'WiCyS + SANS + Flare CTF: Sisterhood of the Traveling Packets',
-      url:   null,
+      url:   'ctf-flare-sisterhood-2026/flare-sisterhood-2026.html',
       year:  '2026',
     },
   ];
