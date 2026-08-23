@@ -64,6 +64,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -71,6 +72,7 @@ body {
   color: var(--white);
   font-family: var(--font-body);
   font-size: 16px;
+  overflow-x: hidden;
   line-height: 1.6;
   overflow-x: hidden;
   cursor: default;
@@ -402,7 +404,7 @@ nav {
 .hero-cta {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   animation: fadeSlideUp .8s .6s ease both;
 }
 
@@ -479,7 +481,7 @@ nav {
 .hero-stats {
   display: flex;
   gap: 1.5rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin-top: 2.5rem;
   animation: fadeSlideUp .8s .75s ease both;
 }
@@ -586,9 +588,10 @@ section {
 /* Shared button styles */
 .btn {
   font-family: var(--font-mono);
-  font-size: .8rem;
-  letter-spacing: .12em;
-  padding: .75rem 2rem;
+  font-size: .72rem;
+  letter-spacing: .08em;
+  padding: .75rem 1.25rem;
+  white-space: nowrap;
   border-radius: 2px;
   text-decoration: none;
   cursor: pointer;
@@ -1229,7 +1232,7 @@ footer {
 /* Desktop only — reserve space for avatar so text never overlaps */
 @media (min-width: 769px) {
   .hero-content {
-    padding-right: calc(clamp(225px, 35vw, 450px) + 8vw);
+    padding-right: calc(clamp(225px, 35vw, 450px) + 4vw);
   }
 }
 
@@ -1238,9 +1241,8 @@ footer {
   .nav-links   { display: none; }
   .hamburger   { display: flex; }
 
-  #hero        { padding: 5rem 1.25rem 3rem; }
-  .hero-avatar { display: none; }
-  #hero        {
+  #hero {
+    padding: 5rem 1.25rem 3rem;
     background-image:
       linear-gradient(to bottom, rgba(6,4,15,.75) 0%, rgba(6,4,15,.6) 40%, rgba(6,4,15,.85) 100%),
       url('assets/HRTBRKRNR.png');
@@ -1248,7 +1250,25 @@ footer {
     background-position: center top;
     background-repeat: no-repeat;
   }
-  .hero-stats  { gap: 1rem; }
+  .hero-avatar { display: none; }
+  .hero-content {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .hero-tag {
+    white-space: normal;
+    word-break: break-word;
+    font-size: .65rem;
+  }
+  .hero-title {
+    font-size: .78rem;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .hero-bio    { max-width: 100%; }
+  .hero-cta    { flex-direction: column; align-items: flex-start; }
+  .hero-stats  { gap: 1rem; flex-wrap: wrap; }
 
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .ctf-grid    { grid-template-columns: 1fr; }
@@ -1269,6 +1289,5 @@ footer {
 
 @media (max-width: 480px) {
   .certs-grid  { grid-template-columns: 1fr; }
-  .hero-cta    { flex-direction: column; }
-  .btn         { text-align: center; }
+  .btn         { text-align: center; font-size: .7rem; padding: .6rem 1rem; }
 }
