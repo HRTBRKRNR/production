@@ -1229,10 +1229,10 @@ footer {
    16. RESPONSIVE
    ════════════════════════════════════════ */
 
-/* Desktop only — reserve space for avatar so text never overlaps */
+/* Desktop only — cap content width so text never overlaps the avatar */
 @media (min-width: 769px) {
   .hero-content {
-    padding-right: calc(clamp(225px, 35vw, 450px) + 4vw);
+    max-width: 55vw;
   }
 }
 
@@ -1254,7 +1254,6 @@ footer {
   .hero-content {
     width: 100%;
     max-width: 100%;
-    box-sizing: border-box;
   }
   .hero-tag {
     white-space: normal;
