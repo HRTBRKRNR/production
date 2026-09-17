@@ -53,7 +53,43 @@
     .writeup-table a:hover { color: var(--green-neon); text-shadow: var(--glow-green); }
     .badge-img { display: block; max-width: 220px; margin: 1.5rem 0; border-radius: 4px; }
     @media (max-width: 900px) { .writeup-layout { grid-template-columns: 1fr; padding: 2rem 1.25rem 4rem; } .toc { position: static; order: -1; } }
-    @media (max-width: 600px) { .writeup-meta { gap: .4rem; } .writeup-table tbody td:first-child { white-space: normal; width: auto; } }
+    @media (max-width: 600px) {
+      .writeup-meta { gap: .4rem; }
+      .writeup-layout {
+        overflow-x: hidden;
+        padding: 1.5rem 1rem 3rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .writeup-main {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow: hidden;
+      }
+      .writeup-section { margin-bottom: 2.5rem; }
+      .writeup-section h2 { font-size: 1rem; }
+      .writeup-section h3 { font-size: .82rem; }
+      .writeup-section p,
+      .writeup-section li {
+        font-size: .95rem;
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+      .code-block {
+        font-size: .75rem;
+        padding: .65rem .85rem;
+        overflow-x: auto;
+        white-space: pre;
+        word-break: normal;
+      }
+      .code-inline { font-size: .8rem; }
+      .image-container { margin: 1rem 0; }
+      .img-caption { font-size: .62rem; }
+      .writeup-table { display: block; overflow-x: auto; width: 100%; }
+      .writeup-table tbody td:first-child { white-space: normal; width: auto; }
+      .writeup-table tbody td { font-size: .82rem; padding: .6rem .75rem; }
+    }
   </style>
 </head>
 <body>
